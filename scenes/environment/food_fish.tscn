@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/food_source.gd" id="1_food"]
+[ext_resource type="PackedScene" path="res://assets/models/fish.glb" id="2_model"]
+
+[node name="FoodFish" type="Node3D"]
+script = ExtResource("1_food")
+food_type = &"fish"
+display_name = "Рыба"
+nutrition = 45.0
+regrow_minutes = 200.0
+visual_name = ""
+
+[node name="Model" parent="." instance=ExtResource("2_model")]

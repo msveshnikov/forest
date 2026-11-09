@@ -7,8 +7,8 @@ extends Node3D
 @export var nutrition := 35.0
 ## Game minutes until the food grows back.
 @export var regrow_minutes := 240.0
-## Child node hidden while the food is gone (optional).
-@export var visual_path: NodePath = ^"Visual"
+## Name of the descendant node hidden while the food is gone ("" = the whole Model).
+@export var visual_name := ""
 
 var _available := true
 var _reserved_by: Node
@@ -51,6 +51,8 @@ func _process(delta: float) -> void:
 
 
 func _set_visible(v: bool) -> void:
-	var n := get_node_or_null(visual_path)
+	var n: Node = get_node_or_null(^"Model")
+	if n and visual_name != "":
+		n = n.find_child(visual_name, true, false)
 	if n:
 		n.visible = v

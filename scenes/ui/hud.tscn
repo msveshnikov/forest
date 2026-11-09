@@ -1,0 +1,243 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/hud.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.16, 0.11, 0.07, 0.62)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="BarBg"]
+bg_color = Color(0.1, 0.07, 0.05, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="FoodFill"]
+bg_color = Color(0.93, 0.55, 0.2, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="EnergyFill"]
+bg_color = Color(0.45, 0.72, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Theme" id="Theme"]
+default_font_size = 20
+Label/colors/font_color = Color(1, 0.97, 0.9, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.6)
+Label/constants/shadow_offset_x = 1
+Label/constants/shadow_offset_y = 2
+PanelContainer/styles/panel = SubResource("Panel")
+
+[sub_resource type="StyleBoxFlat" id="Dim"]
+bg_color = Color(0, 0, 0, 0.45)
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = SubResource("Theme")
+
+[node name="Fade" type="ColorRect" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.03, 0.04, 0.12, 0)
+
+[node name="Needs" type="PanelContainer" parent="Root"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 320.0
+offset_bottom = 150.0
+
+[node name="VBox" type="VBoxContainer" parent="Root/Needs"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SpeciesLabel" type="Label" parent="Root/Needs/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Лиса"
+
+[node name="FoodRow" type="HBoxContainer" parent="Root/Needs/VBox"]
+layout_mode = 2
+
+[node name="L" type="Label" parent="Root/Needs/VBox/FoodRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Сытость"
+
+[node name="FoodBar" type="ProgressBar" parent="Root/Needs/VBox/FoodRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("BarBg")
+theme_override_styles/fill = SubResource("FoodFill")
+value = 70.0
+show_percentage = false
+
+[node name="EnergyRow" type="HBoxContainer" parent="Root/Needs/VBox"]
+layout_mode = 2
+
+[node name="L" type="Label" parent="Root/Needs/VBox/EnergyRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "Бодрость"
+
+[node name="EnergyBar" type="ProgressBar" parent="Root/Needs/VBox/EnergyRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 22)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("BarBg")
+theme_override_styles/fill = SubResource("EnergyFill")
+value = 90.0
+show_percentage = false
+
+[node name="Clock" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 66.0
+grow_horizontal = 0
+
+[node name="ClockLabel" type="Label" parent="Root/Clock"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "День 1 · 08:00 · день"
+horizontal_alignment = 1
+
+[node name="WarnLabel" type="Label" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 24.0
+offset_top = 160.0
+offset_right = 524.0
+offset_bottom = 220.0
+theme_override_colors/font_color = Color(1, 0.75, 0.5, 1)
+
+[node name="MessageLabel" type="Label" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -450.0
+offset_top = 90.0
+offset_right = 450.0
+offset_bottom = 160.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HintLabel" type="Label" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -110.0
+offset_right = 400.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+
+[node name="HelpLabel" type="Label" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = -190.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 17
+text = "WASD — идти, Shift — бежать, Пробел — прыжок
+Мышь — камера, колесо — приблизить
+E — есть / спать дома
+F или ЛКМ — поймать добычу (хищники)
+Esc — пауза"
+horizontal_alignment = 2
+
+[node name="PausePanel" type="Panel" parent="Root"]
+unique_name_in_owner = true
+process_mode = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_styles/panel = SubResource("Dim")
+
+[node name="Box" type="VBoxContainer" parent="Root/PausePanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -90.0
+offset_right = 150.0
+offset_bottom = 90.0
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Root/PausePanel/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 34
+text = "Пауза"
+horizontal_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="Root/PausePanel/Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Продолжить"
+
+[node name="MenuButton" type="Button" parent="Root/PausePanel/Box"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Главное меню"

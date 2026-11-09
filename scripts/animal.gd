@@ -24,7 +24,7 @@ var hunger := 20.0
 var fatigue := 10.0
 var sleeping := false
 var hidden_in_home := false
-var home: Node3D
+var home: AnimalHome
 
 var _eat_timer := 0.0
 var _eat_target: Node

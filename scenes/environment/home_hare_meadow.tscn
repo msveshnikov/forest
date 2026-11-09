@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/animal_home.gd" id="1_home"]
+[ext_resource type="PackedScene" path="res://assets/models/hare_burrow.glb" id="2_model"]
+
+[node name="HomeHareMeadow" type="Node3D"]
+script = ExtResource("1_home")
+home_id = &"hare_meadow"
+species = &"hare"
+display_name = "Поляна зайцев"
+radius = 3.0
+sleep_offset = Vector3(0, 0.0, 0.9)
+
+[node name="Model" parent="." instance=ExtResource("2_model")]

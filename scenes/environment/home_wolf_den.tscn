@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/animal_home.gd" id="1_home"]
+[ext_resource type="PackedScene" path="res://assets/models/wolf_den.glb" id="2_model"]
+
+[node name="HomeWolfDen" type="Node3D"]
+script = ExtResource("1_home")
+home_id = &"wolf_den"
+species = &"wolf"
+display_name = "Логово волка"
+radius = 2.5
+sleep_offset = Vector3(0, 0.0, 2.2)
+
+[node name="Model" parent="." instance=ExtResource("2_model")]

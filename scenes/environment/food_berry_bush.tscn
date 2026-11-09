@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/food_source.gd" id="1_food"]
+[ext_resource type="PackedScene" path="res://assets/models/berry_bush.glb" id="2_model"]
+
+[node name="FoodBerryBush" type="Node3D"]
+script = ExtResource("1_food")
+food_type = &"berries"
+display_name = "Ягоды"
+nutrition = 30.0
+regrow_minutes = 360.0
+visual_name = "Berries"
+
+[node name="Model" parent="." instance=ExtResource("2_model")]

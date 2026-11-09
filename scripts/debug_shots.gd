@@ -3,6 +3,7 @@ extends Node
 ## given times (and optionally simulates input) so the game can be checked headlessly.
 ## Example file: {"times":[3,6], "quit":8, "press":{"move_forward":[1,5]}}
 
+var active := false
 var _cfg := {}
 var _t := 0.0
 var _taken := {}
@@ -12,6 +13,7 @@ func _ready() -> void:
 	if not FileAccess.file_exists("res://debug_shots.json"):
 		set_process(false)
 		return
+	active = true
 	_cfg = JSON.parse_string(FileAccess.get_file_as_string("res://debug_shots.json"))
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://screenshots"))

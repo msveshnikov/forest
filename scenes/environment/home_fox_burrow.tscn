@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/animal_home.gd" id="1_home"]
+[ext_resource type="PackedScene" path="res://assets/models/fox_burrow.glb" id="2_model"]
+
+[node name="HomeFoxBurrow" type="Node3D"]
+script = ExtResource("1_home")
+home_id = &"fox_burrow"
+species = &"fox"
+display_name = "Нора лисы"
+radius = 2.0
+sleep_offset = Vector3(0, 0.0, 2.0)
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
