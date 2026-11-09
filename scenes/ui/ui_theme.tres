@@ -1,0 +1,71 @@
+[gd_resource type="Theme" load_steps=6 format=3]
+
+[sub_resource type="StyleBoxFlat" id="Btn"]
+bg_color = Color(0.36, 0.55, 0.24, 0.92)
+border_width_bottom = 4
+border_color = Color(0.22, 0.36, 0.14, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 18.0
+content_margin_top = 8.0
+content_margin_right = 18.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="BtnHover"]
+bg_color = Color(0.47, 0.68, 0.3, 0.97)
+border_width_bottom = 4
+border_color = Color(0.25, 0.42, 0.15, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 18.0
+content_margin_top = 8.0
+content_margin_right = 18.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="BtnPressed"]
+bg_color = Color(0.93, 0.55, 0.2, 1)
+border_width_bottom = 4
+border_color = Color(0.62, 0.32, 0.1, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+content_margin_left = 18.0
+content_margin_top = 8.0
+content_margin_right = 18.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.2, 0.13, 0.08, 0.72)
+corner_radius_top_left = 22
+corner_radius_top_right = 22
+corner_radius_bottom_right = 22
+corner_radius_bottom_left = 22
+content_margin_left = 28.0
+content_margin_top = 22.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+
+[sub_resource type="StyleBoxEmpty" id="Empty"]
+
+[resource]
+default_font_size = 22
+Button/colors/font_color = Color(1, 0.98, 0.92, 1)
+Button/colors/font_hover_color = Color(1, 1, 1, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_focus_color = Color(1, 1, 1, 1)
+Button/font_sizes/font_size = 26
+Button/styles/normal = SubResource("Btn")
+Button/styles/hover = SubResource("BtnHover")
+Button/styles/pressed = SubResource("BtnPressed")
+Button/styles/hover_pressed = SubResource("BtnPressed")
+Button/styles/focus = SubResource("Empty")
+Label/colors/font_color = Color(1, 0.97, 0.9, 1)
+Label/colors/font_shadow_color = Color(0.1, 0.05, 0, 0.6)
+Label/constants/shadow_offset_x = 2
+Label/constants/shadow_offset_y = 3
+PanelContainer/styles/panel = SubResource("Panel")
