@@ -93,3 +93,37 @@ func _process(delta: float) -> void:
 			states[key] = states.get(key, 0) + 1
 	print("[%s] fps=%d player h=%.0f f=%.0f | %s" % [TimeOfDay.clock_text(), Engine.get_frames_per_second(),
 		player.hunger, player.fatigue, states])
+
+
+## Automated check of needs: eat nearby food and sleep at home (called by DebugShots).
+func debug_test_needs() -> void:
+	var pc: PlayerController = player.controller
+	var food: Node3D = null
+	for f in get_tree().get_nodes_in_group(&"food"):
+		if player.can_eat(f):
+			food = f
+			break
+	player.hunger = 80.0
+	player.global_position = food.global_position + Vector3(0.8, 1.0, 0.0)
+	await get_tree().create_timer(0.6).timeout
+	print("TEST eat: near=", food.display_name, " hint='", pc._find_interaction(player), "' hunger before=", player.hunger)
+	Input.action_press(&"interact")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release(&"interact")
+	await get_tree().create_timer(3.0).timeout
+	print("TEST eat: hunger after=", snappedf(player.hunger, 0.1), " food available=", food.is_available())
+	player.fatigue = 90.0
+	player.global_position = player.home.sleep_spot() + Vector3.UP
+	await get_tree().create_timer(0.6).timeout
+	var t0 := TimeOfDay.time
+	print("TEST sleep: hint='", pc._find_interaction(player), "' fatigue=", player.fatigue, " time=", TimeOfDay.clock_text())
+	Input.action_press(&"interact")
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	Input.action_release(&"interact")
+	await get_tree().create_timer(2.5).timeout
+	print("TEST sleep: sleeping=", player.sleeping, " ff=", TimeOfDay.is_fast_forward(), " fatigue=", snappedf(player.fatigue, 0.1),
+		" time ", TimeOfDay.clock_text(), " (+%.1f h)" % (TimeOfDay.time - t0))
+	await get_tree().create_timer(6.0).timeout
+	print("TEST sleep end: sleeping=", player.sleeping, " fatigue=", snappedf(player.fatigue, 0.1), " time ", TimeOfDay.clock_text())

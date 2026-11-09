@@ -31,10 +31,13 @@ func _process(delta: float) -> void:
 			Input.action_press(action)
 		elif not on and Input.is_action_pressed(action) and _t >= span[1]:
 			Input.action_release(action)
+	if _cfg.has("hour") and not _taken.has("hour") and _t > 0.3:
+		_taken["hour"] = true
+		TimeOfDay.time = float(_cfg["hour"])
 	if _cfg.has("call") and not _taken.has("call") and _t > 1.0:
 		_taken["call"] = true
 		for c in _cfg["call"]:
-			get_tree().current_scene.propagate_call(c, [], false)
+			get_tree().current_scene.call_deferred(c)
 	for i in _cfg.get("times", []).size():
 		var at: float = _cfg["times"][i]
 		if _t >= at and not _taken.has(i):
