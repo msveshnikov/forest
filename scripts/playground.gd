@@ -13,3 +13,17 @@ func _ready() -> void:
 	pc.camera_rig = rig
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	print("playground: spawned ", a.name, " anims=", a.anim.get_animation_list())
+	var x := -3.0
+	for sp in Game.SPECIES:
+		var o: Animal = Game.animal_scene(sp).instantiate()
+		o.position = Vector3(x, 0.3, -4.0)
+		add_child(o)
+		o.rotation.y = PI * 0.8
+		x += 1.3
+	for i in 12:
+		await get_tree().create_timer(0.1).timeout
+		print(i, " pos ", a.global_position, " vel ", a.velocity, " dir ", a.move_dir, " floor ", a.is_on_floor())
+	for n in get_children():
+		if n is Node3D:
+			print(n.name, " ", n.global_position)
+	print("cam ", get_viewport().get_camera_3d().global_transform)

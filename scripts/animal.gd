@@ -177,7 +177,7 @@ func wake_up() -> void:
 	if hidden_in_home:
 		hidden_in_home = false
 		visible = true
-		collision_layer = 1
+		collision_layer = 2
 	if is_player():
 		TimeOfDay.set_fast_forward(false)
 		message.emit("Доброе утро!" if not TimeOfDay.is_night() else "Вы проснулись.")

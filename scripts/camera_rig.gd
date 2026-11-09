@@ -24,7 +24,7 @@ func attach(a: Animal) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotation.y -= event.relative.x * mouse_sensitivity
-		_pitch = clampf(_pitch - event.relative.y * mouse_sensitivity, -1.2, 0.35)
+		_pitch = clampf(_pitch - event.relative.y * mouse_sensitivity, -1.2, 0.15)
 	elif event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			spring.spring_length = maxf(target.stats.camera_distance * 0.4, spring.spring_length * 0.9)
