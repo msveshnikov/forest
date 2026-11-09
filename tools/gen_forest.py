@@ -119,7 +119,7 @@ node("Sun", "DirectionalLight3D", props={
     "light_color": "Color(1, 0.93, 0.78, 1)", "light_energy": "1.2", "shadow_enabled": "true",
     "shadow_bias": "0.06", "shadow_blur": "1.5", "directional_shadow_mode": "1",
     "directional_shadow_split_1": "0.25", "directional_shadow_blend_splits": "true",
-    "directional_shadow_max_distance": "45.0"})
+    "directional_shadow_max_distance": "32.0"})
 node("Moon", "DirectionalLight3D", props={
     "transform": "Transform3D(-0.7071, 0.5, -0.5, 0, 0.7071, 0.7071, 0.7071, 0.5, -0.5, 0, 20, 0)",
     "light_color": "Color(0.55, 0.65, 1, 1)", "light_energy": "0.2", "sky_mode": "1"})
@@ -178,11 +178,9 @@ sky = SubResource("Sky")
 ambient_light_source = 2
 ambient_light_color = Color(1, 0.96, 0.88, 1)
 ambient_light_energy = 0.9
+reflected_light_source = 1
 tonemap_mode = 2
 tonemap_white = 6.0
-glow_enabled = true
-glow_intensity = 0.35
-glow_bloom = 0.04
 fog_enabled = true
 fog_light_color = Color(0.85, 0.88, 0.75, 1)
 fog_light_energy = 1.0
@@ -190,7 +188,8 @@ fog_sun_scatter = 0.25
 fog_density = 0.012
 fog_sky_affect = 0.35
 adjustment_enabled = true
-adjustment_saturation = 1.15
+adjustment_saturation = 1.25
+adjustment_contrast = 1.06
 '''
 
 text = f'[gd_scene load_steps={len(ext) + 5} format=3]\n\n' + "\n".join(ext) + "\n\n" + subs + "\n" + "\n".join(nodes)

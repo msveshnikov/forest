@@ -7,8 +7,8 @@ from mathutils import Vector, Euler, noise
 
 # ----------------------------------------------------------------- palette
 C = dict(
-    grass='#86B347', grass2='#77A63F', grass3='#93BD52', sand='#DDBF83', bed='#A39A7C', rock='#A3A097',
-    rock_dark='#878479', moss='#7BA83F', moss2='#93BA4B', bark='#7A4A2A', bark_dark='#5E3820', wood_light='#D2A26A',
+    grass='#76A63C', grass2='#679536', grass3='#86B347', sand='#DDBF83', bed='#A39A7C', rock='#A3A097',
+    rock_dark='#878479', moss='#6F9E38', moss2='#93BA4B', bark='#7A4A2A', bark_dark='#5E3820', wood_light='#D2A26A',
     pine='#2F6E3E', pine2='#3D8248', pine3='#4C9150', birch_bark='#EEEBE2', birch_dark='#3A3632', birch_leaf='#93C44D',
     birch_leaf2='#7FB342', oak_leaf='#4F8A35', oak_leaf2='#62A03F', oak_leaf3='#76AE45', bush='#5C9A3A', bush2='#6DAA43',
     berry='#D8303A', fern='#4E8F3A', fern2='#5FA246', cap_red='#D9452E', cap_brown='#A7642F', stem='#F1E6CF',

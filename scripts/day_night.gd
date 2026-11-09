@@ -32,7 +32,19 @@ func _ready() -> void:
 	_update()
 
 
-func _process(_delta: float) -> void:
+var _acc := 0.0
+var _last_time := -100.0
+
+
+func _process(delta: float) -> void:
+	_acc += delta
+	if _acc < 0.2:
+		return
+	_acc = 0.0
+	# rebuilding the sky is expensive: only update when the clock moved noticeably
+	if absf(TimeOfDay.time - _last_time) < 0.04 and absf(TimeOfDay.time - _last_time) < 23.0:
+		return
+	_last_time = TimeOfDay.time
 	_update()
 
 
@@ -61,8 +73,8 @@ func _update() -> void:
 	_sky.ground_bottom_color = top.darkened(0.5)
 	_sky.sun_angle_max = 30.0
 
-	_env.ambient_light_energy = lerpf(0.35, 1.0, day)
+	_env.ambient_light_energy = lerpf(0.3, 0.72, day)
 	_env.ambient_light_color = Color(0.45, 0.5, 0.75).lerp(Color(1.0, 0.96, 0.88), day)
 	_env.fog_light_color = FOG_NIGHT.lerp(FOG_DAY, day).lerp(FOG_DUSK, dusk * 0.7)
-	_env.fog_density = lerpf(0.02, 0.011, day)
+	_env.fog_density = lerpf(0.018, 0.009, day)
 	_env.background_energy_multiplier = lerpf(0.4, 1.0, day)

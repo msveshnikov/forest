@@ -41,3 +41,8 @@ func start_game(species: StringName) -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	get_tree().change_scene_to_file(FOREST_PATH)
+
+
+## Used by automated checks (DebugShots "call").
+func debug_start() -> void:
+	start_game(&"squirrel")

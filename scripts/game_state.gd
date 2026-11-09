@@ -37,3 +37,26 @@ func _bind(action: StringName, keys: Array) -> void:
 		var ev := InputEventKey.new()
 		ev.physical_keycode = k
 		InputMap.action_add_event(action, ev)
+
+
+# ---------------------------------------------------------------- adaptive resolution
+## Keeps ~60 FPS on weak GPUs by changing the 3D render scale (FSR upscaling).
+const MIN_SCALE := 0.65
+const MAX_SCALE := 1.0
+var _perf_t := 0.0
+var _perf_frames := 0
+
+
+func _process(delta: float) -> void:
+	_perf_t += delta
+	_perf_frames += 1
+	if _perf_t < 2.0:
+		return
+	var fps := _perf_frames / _perf_t
+	_perf_t = 0.0
+	_perf_frames = 0
+	var vp := get_viewport()
+	if fps < 52.0 and vp.scaling_3d_scale > MIN_SCALE:
+		vp.scaling_3d_scale = maxf(MIN_SCALE, vp.scaling_3d_scale - 0.05)
+	elif fps > 59.0 and vp.scaling_3d_scale < MAX_SCALE:
+		vp.scaling_3d_scale = minf(MAX_SCALE, vp.scaling_3d_scale + 0.05)

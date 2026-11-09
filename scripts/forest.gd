@@ -30,6 +30,8 @@ func _ready() -> void:
 	_spawn_player(Game.selected_species)
 	for sp in POPULATION:
 		var n: int = POPULATION[sp] - (1 if sp == Game.selected_species and POPULATION[sp] > 1 else 0)
+		if DebugShots.active and DebugShots._cfg.has("pop_scale"):
+			n = int(n * float(DebugShots._cfg["pop_scale"]))
 		for i in n:
 			_spawn_ai(sp)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -91,7 +93,13 @@ func _process(delta: float) -> void:
 		if a is Animal and a.controller is AIController:
 			var key := "%s:%s" % [a.stats.species, a.controller.state_name()]
 			states[key] = states.get(key, 0) + 1
-	print("[%s] fps=%d player h=%.0f f=%.0f | %s" % [TimeOfDay.clock_text(), Engine.get_frames_per_second(),
+	print("[%s] proc=%.1fms phys=%.1fms fps=%d draws=%d prims=%dk objs=%d player h=%.0f f=%.0f | %s" % [TimeOfDay.clock_text(),
+		Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0,
+		Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0,
+		Engine.get_frames_per_second(),
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME) / 1000,
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_OBJECTS_IN_FRAME),
 		player.hunger, player.fatigue, states])
 
 
