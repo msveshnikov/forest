@@ -51,7 +51,7 @@ home_id = &"{d['home']}"
 nocturnal = {str(d['noct']).lower()}
 sense_radius = {d['sense']}
 attack_range = {d['atk']}
-hunger_rate = {d['hunger']}
+hunger_rate = {round(d['hunger'] * 0.7, 3)}
 camera_distance = {d['cam']}
 camera_height = {d['camh']}
 '''

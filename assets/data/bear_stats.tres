@@ -17,6 +17,6 @@ home_id = &"bear_cave"
 nocturnal = false
 sense_radius = 12
 attack_range = 1.4
-hunger_rate = 0.4
+hunger_rate = 0.28
 camera_distance = 5.0
 camera_height = 1.2

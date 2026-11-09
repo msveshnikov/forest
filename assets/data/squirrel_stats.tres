@@ -17,6 +17,6 @@ home_id = &"squirrel_hollow"
 nocturnal = false
 sense_radius = 10
 attack_range = 0.4
-hunger_rate = 0.55
+hunger_rate = 0.385
 camera_distance = 1.5
 camera_height = 0.25

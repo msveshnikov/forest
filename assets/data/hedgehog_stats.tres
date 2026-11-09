@@ -17,6 +17,6 @@ home_id = &"hedgehog_nest"
 nocturnal = true
 sense_radius = 6
 attack_range = 0.4
-hunger_rate = 0.4
+hunger_rate = 0.28
 camera_distance = 1.4
 camera_height = 0.22

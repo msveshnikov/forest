@@ -343,7 +343,7 @@ def make_layout():
 
     fol('grass_tuft', 1800, on_grass, 0.8, 1.6)
     fol('flowers', 260, lambda x, y: on_grass(x, y) and (hypot(x - 30, y - 5) < 14 or rng.random() < 0.35))
-    fol('fern', 340, lambda x, y: on_grass(x, y) and (max(abs(x), abs(y)) > 15 or rng.random() < 0.3), 0.8, 1.5)
+    fol('fern', 340, lambda x, y: on_grass(x, y) and (max(abs(x), abs(y)) > 15 or rng.random() < 0.3), 0.5, 0.95)
     fol('bush', 120, lambda x, y: free(x, y, 0.8), 0.8, 1.4)
     fol('reeds', 70, lambda x, y: POND[2] - 0.5 < pond_dist(x, y) < POND[2] + 1.6 or 1.5 < stream_dist(x, y) < 2.4, 0.8, 1.3)
     fol('mushroom_red', 60, on_grass, 0.6, 1.0)

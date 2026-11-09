@@ -17,6 +17,6 @@ home_id = &"hare_meadow"
 nocturnal = false
 sense_radius = 14
 attack_range = 0.5
-hunger_rate = 0.5
+hunger_rate = 0.35
 camera_distance = 2.0
 camera_height = 0.35

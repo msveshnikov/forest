@@ -16,6 +16,9 @@ func _ready() -> void:
 	active = true
 	_cfg = JSON.parse_string(FileAccess.get_file_as_string("res://debug_shots.json"))
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	Engine.time_scale = float(_cfg.get("timescale", 1.0))
+	if _cfg.has("species"):
+		Game.selected_species = StringName(_cfg["species"])
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path("res://screenshots"))
 
 
