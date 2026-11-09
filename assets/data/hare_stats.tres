@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AnimalStats" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/animal_stats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+species = &"hare"
+display_name = "Заяц"
+description = "Очень быстрый и прыгучий. Ест клевер и ягоды, убегает от хищников."
+walk_speed = 2.2
+run_speed = 9.0
+jump_velocity = 6.2
+is_predator = false
+prey = Array[StringName]([])
+diet = Array[StringName]([&"clover", &"berries"])
+home_id = &"hare_meadow"
+nocturnal = false
+sense_radius = 14
+attack_range = 0.5
+hunger_rate = 0.5
+camera_distance = 2.0
+camera_height = 0.35

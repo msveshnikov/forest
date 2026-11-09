@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/animals/animal_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://assets/models/wolf.glb" id="2_model"]
+[ext_resource type="Resource" path="res://assets/data/wolf_stats.tres" id="3_stats"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wolf"]
+radius = 0.3
+height = 0.95
+
+[node name="Wolf" instance=ExtResource("1_base")]
+stats = ExtResource("3_stats")
+
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.475, 0)
+shape = SubResource("CapsuleShape3D_wolf")
+
+[node name="wolf" parent="Model" instance=ExtResource("2_model")]

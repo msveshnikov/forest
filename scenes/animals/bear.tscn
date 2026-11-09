@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/animals/animal_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://assets/models/bear.glb" id="2_model"]
+[ext_resource type="Resource" path="res://assets/data/bear_stats.tres" id="3_stats"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bear"]
+radius = 0.5
+height = 1.45
+
+[node name="Bear" instance=ExtResource("1_base")]
+stats = ExtResource("3_stats")
+
+[node name="CollisionShape3D" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)
+shape = SubResource("CapsuleShape3D_bear")
+
+[node name="bear" parent="Model" instance=ExtResource("2_model")]

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AnimalStats" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/animal_stats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+species = &"bear"
+display_name = "Медведь"
+description = "Большой и сильный. Ловит рыбу в ручье, ест ягоды и грибы."
+walk_speed = 2.0
+run_speed = 6.4
+jump_velocity = 4.4
+is_predator = true
+prey = Array[StringName]([&"hare"])
+diet = Array[StringName]([&"fish", &"berries", &"mushroom", &"insects"])
+home_id = &"bear_cave"
+nocturnal = false
+sense_radius = 12
+attack_range = 1.4
+hunger_rate = 0.4
+camera_distance = 5.0
+camera_height = 1.2

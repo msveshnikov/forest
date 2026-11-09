@@ -24,3 +24,13 @@ window/size/viewport_height=900
 anti_aliasing/quality/msaa_3d=2
 
 renderer/rendering_method="mobile"
+
+[autoload]
+
+TimeOfDay="*res://scripts/time_of_day.gd"
+Game="*res://scripts/game_state.gd"
+DebugShots="*res://scripts/debug_shots.gd"
+
+[physics]
+
+common/physics_ticks_per_second=60

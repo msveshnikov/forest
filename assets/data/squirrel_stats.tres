@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="AnimalStats" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/animal_stats.gd" id="1_stats"]
+
+[resource]
+script = ExtResource("1_stats")
+species = &"squirrel"
+display_name = "Белка"
+description = "Маленькая и шустрая. Собирает жёлуди и грибы, живёт в дупле дуба."
+walk_speed = 1.8
+run_speed = 6.0
+jump_velocity = 6.4
+is_predator = false
+prey = Array[StringName]([])
+diet = Array[StringName]([&"acorn", &"mushroom", &"berries"])
+home_id = &"squirrel_hollow"
+nocturnal = false
+sense_radius = 10
+attack_range = 0.4
+hunger_rate = 0.55
+camera_distance = 1.5
+camera_height = 0.25
