@@ -12,12 +12,16 @@ config_version=5
 
 config/name="Forest Friends"
 run/main_scene="res://scenes/main.tscn"
+config/icon="res://icon.svg"
 config/features=PackedStringArray("4.7", "Mobile")
 
 [display]
 
 window/size/viewport_width=1600
 window/size/viewport_height=900
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=4
 
 [rendering]
 
@@ -26,6 +30,8 @@ anti_aliasing/quality/screen_space_aa=1
 scaling_3d/mode=0
 scaling_3d/scale=0.8
 renderer/rendering_method="mobile"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 lights_and_shadows/directional_shadow/size=2048
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=1
 

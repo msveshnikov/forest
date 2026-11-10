@@ -34,7 +34,22 @@ func _ready() -> void:
 			n = int(n * float(DebugShots._cfg["pop_scale"]))
 		for i in n:
 			_spawn_ai(sp)
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Game.capture_mouse()
+	if Game.touch:
+		_add_touch_controls()
+	else:
+		Game.touch_mode_changed.connect(_add_touch_controls, CONNECT_ONE_SHOT)
+
+
+var touch_controls: CanvasLayer
+
+
+func _add_touch_controls() -> void:
+	if touch_controls:
+		return
+	touch_controls = load("res://scripts/touch_controls.gd").new()
+	touch_controls.forest = self
+	add_child(touch_controls)
 
 
 func _on_nav_baked() -> void:
@@ -135,3 +150,50 @@ func debug_test_needs() -> void:
 		" time ", TimeOfDay.clock_text(), " (+%.1f h)" % (TimeOfDay.time - t0))
 	await get_tree().create_timer(6.0).timeout
 	print("TEST sleep end: sleeping=", player.sleeping, " fatigue=", snappedf(player.fatigue, 0.1), " time ", TimeOfDay.clock_text())
+
+
+## Automated check of touch controls: drag the stick forward, then turn the camera (called by DebugShots).
+func debug_test_touch() -> void:
+	Game.enable_touch()
+	await get_tree().create_timer(0.5).timeout
+	var h := get_viewport().get_visible_rect().size.y
+	var p0 := player.global_position
+	_touch(0, Vector2(230, h - 230), true)
+	for i in 10:
+		_drag(0, Vector2(230, h - 230 - 16.0 * (i + 1)), Vector2(0, -16))
+		await get_tree().physics_frame
+	await get_tree().create_timer(1.5).timeout
+	print("TEST touch walk: moved=", snappedf(p0.distance_to(player.global_position), 0.01), " running=", player.running)
+	for i in 6:
+		_drag(0, Vector2(230, h - 230 - 160.0 - 10.0 * (i + 1)), Vector2(0, -10))
+		await get_tree().physics_frame
+	await get_tree().create_timer(0.8).timeout
+	print("TEST touch run: running=", player.running, " speed=", snappedf(Vector2(player.velocity.x, player.velocity.z).length(), 0.1))
+	var yaw0 := camera_rig.rotation.y
+	_touch(1, Vector2(1100, 400), true)
+	for i in 10:
+		_drag(1, Vector2(1100 + 12.0 * (i + 1), 400), Vector2(12, 0))
+		await get_tree().process_frame
+	_touch(1, Vector2(1220, 400), false)
+	print("TEST touch look: yaw change=", snappedf(camera_rig.rotation.y - yaw0, 0.01))
+	await get_tree().create_timer(0.5).timeout
+	_touch(0, Vector2(230, h - 400), false)
+	await get_tree().create_timer(0.8).timeout
+	print("TEST touch release: speed=", snappedf(Vector2(player.velocity.x, player.velocity.z).length(), 0.1),
+		" fwd=", Input.get_action_strength(&"move_forward"))
+
+
+func _touch(idx: int, pos: Vector2, pressed: bool) -> void:
+	var ev := InputEventScreenTouch.new()
+	ev.index = idx
+	ev.position = pos
+	ev.pressed = pressed
+	Input.parse_input_event(ev)
+
+
+func _drag(idx: int, pos: Vector2, rel: Vector2) -> void:
+	var ev := InputEventScreenDrag.new()
+	ev.index = idx
+	ev.position = pos
+	ev.relative = rel
+	Input.parse_input_event(ev)

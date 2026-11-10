@@ -11,7 +11,7 @@ func _ready() -> void:
 	add_child(rig)
 	rig.attach(a)
 	pc.camera_rig = rig
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	Game.capture_mouse()
 	print("playground: spawned ", a.name, " anims=", a.anim.get_animation_list())
 	var x := -3.0
 	for sp in Game.SPECIES:

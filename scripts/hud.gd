@@ -25,13 +25,42 @@ func _ready() -> void:
 	%ResumeButton.pressed.connect(_toggle_pause)
 	%MenuButton.pressed.connect(_to_menu)
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	if Game.touch:
+		_use_touch_help()
+	else:
+		Game.touch_mode_changed.connect(_use_touch_help, CONNECT_ONE_SHOT)
+
+
+## Swaps the keyboard help for touch help and moves it off the touch buttons.
+func _use_touch_help() -> void:
+	help_label.text = "Левый палец — идти (дальше от центра — бежать)
+Правый палец — камера, два пальца — приблизить
+«Действие» — есть, спать дома, проснуться"
+	help_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	help_label.set_anchors_preset(Control.PRESET_CENTER_TOP)
+	help_label.offset_left = -360.0
+	help_label.offset_right = 360.0
+	help_label.offset_top = 205.0
+	help_label.offset_bottom = 300.0
+	help_label.grow_vertical = Control.GROW_DIRECTION_END
+	help_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	hint_label.text = _touch_text(hint_label.text)
+
+
+## Hints without keyboard keys: "[E] Съесть: ягоды" -> "Съесть: ягоды".
+func _touch_text(t: String) -> String:
+	if t.begins_with("["):
+		var i := t.find("] ")
+		if i >= 0:
+			return t.substr(i + 2)
+	return t
 
 
 func bind_player(a: Animal, pc: PlayerController) -> void:
 	_player = a
 	species_label.text = a.stats.display_name
 	a.message.connect(show_message)
-	pc.interaction_hint.connect(func(t: String) -> void: hint_label.text = t)
+	pc.interaction_hint.connect(func(t: String) -> void: hint_label.text = _touch_text(t) if Game.touch else t)
 	show_message("Вы — %s. %s" % [a.stats.display_name.to_lower(), a.stats.description])
 
 
@@ -70,7 +99,10 @@ func _toggle_pause() -> void:
 	var p := not get_tree().paused
 	get_tree().paused = p
 	pause_panel.visible = p
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if p else Input.MOUSE_MODE_CAPTURED
+	if p:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	else:
+		Game.capture_mouse()
 
 
 func _to_menu() -> void:

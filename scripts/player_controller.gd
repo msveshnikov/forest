@@ -38,6 +38,11 @@ func control(a: Animal, _delta: float) -> void:
 		interaction_hint.emit(hint)
 
 
+## The interaction hint shown right now (with the keyboard key in brackets).
+func current_hint() -> String:
+	return _hint
+
+
 func _interact(a: Animal) -> void:
 	if a.sleeping:
 		a.wake_up()

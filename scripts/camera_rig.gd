@@ -23,13 +23,26 @@ func attach(a: Animal) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		rotation.y -= event.relative.x * mouse_sensitivity
-		_pitch = clampf(_pitch - event.relative.y * mouse_sensitivity, -1.2, 0.15)
+		look(event.relative * mouse_sensitivity)
 	elif event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			spring.spring_length = maxf(target.stats.camera_distance * 0.4, spring.spring_length * 0.9)
+			zoom(0.9)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			spring.spring_length = minf(target.stats.camera_distance * 2.5, spring.spring_length * 1.1)
+			zoom(1.1)
+
+
+## Turns the camera: x is yaw and y is pitch, both in radians.
+func look(delta_rad: Vector2) -> void:
+	rotation.y -= delta_rad.x
+	_pitch = clampf(_pitch - delta_rad.y, -1.2, 0.15)
+
+
+## Multiplies the camera distance, clamped to the range for the current animal.
+func zoom(factor: float) -> void:
+	if target == null:
+		return
+	var d := target.stats.camera_distance
+	spring.spring_length = clampf(spring.spring_length * factor, d * 0.4, d * 2.5)
 
 
 func _physics_process(delta: float) -> void:
