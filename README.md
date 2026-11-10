@@ -36,6 +36,7 @@
 ```
 assets/models/      .glb из Blender (звери, деревья, камни, дома, рельеф, вода…)
 assets/data/        ресурсы AnimalStats (*_stats.tres), layout.json — раскладка леса
+assets/icons/       иконки Android (адаптивные слои 432×432 и основная 192×192), исходники SVG рядом; общая иконка — icon.svg
 scenes/animals/     animal_base.tscn + 6 наследованных сцен, player_controller.tscn, ai_controller.tscn
 scenes/environment/ обёртки моделей, источники еды (food_*.tscn), дома (home_*.tscn)
 scenes/world/       forest.tscn — главная локация, camera_rig.tscn

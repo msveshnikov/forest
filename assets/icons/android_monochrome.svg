@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="432" viewBox="0 0 108 108">
+  <!-- Android 13+ themed icon: fox silhouette, tinted by the launcher -->
+  <defs>
+    <mask id="cut">
+      <rect width="128" height="128" fill="#fff"/>
+      <path d="M37 52 L39 31 L52 45 Z" fill="#000"/>
+      <path d="M91 52 L89 31 L76 45 Z" fill="#000"/>
+      <ellipse cx="48" cy="68" rx="5" ry="6.5" fill="#000"/>
+      <ellipse cx="80" cy="68" rx="5" ry="6.5" fill="#000"/>
+      <ellipse cx="64" cy="103" rx="6.5" ry="4.8" fill="#000"/>
+    </mask>
+  </defs>
+  <g transform="translate(54 54) scale(0.56) translate(-64 -66)">
+    <g fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round" mask="url(#cut)">
+      <path d="M30 62 L34 20 L60 46 Z"/>
+      <path d="M98 62 L94 20 L68 46 Z"/>
+      <path d="M24 62 Q28 42 64 42 Q100 42 104 62 Q106 78 86 94 L64 112 L42 94 Q22 78 24 62 Z"/>
+    </g>
+  </g>
+</svg>

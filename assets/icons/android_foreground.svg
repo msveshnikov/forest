@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="432" viewBox="0 0 108 108">
+  <!-- Android adaptive icon foreground: fox from res://icon.svg, kept inside the 66dp safe zone -->
+  <defs>
+    <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff9a3c"/>
+      <stop offset="1" stop-color="#e2621b"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(54 54) scale(0.56) translate(-64 -66)">
+    <g stroke="#3a1e0e" stroke-width="3" stroke-linejoin="round">
+      <path d="M30 62 L34 20 L60 46 Z" fill="url(#fur)"/>
+      <path d="M98 62 L94 20 L68 46 Z" fill="url(#fur)"/>
+      <path d="M24 62 Q28 42 64 42 Q100 42 104 62 Q106 78 86 94 L64 112 L42 94 Q22 78 24 62 Z" fill="url(#fur)"/>
+    </g>
+    <path d="M37 52 L39 31 L52 45 Z" fill="#3a1e0e"/>
+    <path d="M91 52 L89 31 L76 45 Z" fill="#3a1e0e"/>
+    <path d="M26 68 Q44 68 55 84 Q59 90 64 90 Q69 90 73 84 Q84 68 102 68 Q98 82 85 93 L64 110 L43 93 Q30 82 26 68 Z" fill="#fff4e4"/>
+    <ellipse cx="48" cy="68" rx="5" ry="6.5" fill="#2a160a"/>
+    <ellipse cx="80" cy="68" rx="5" ry="6.5" fill="#2a160a"/>
+    <circle cx="49.8" cy="65.6" r="1.8" fill="#ffffff"/>
+    <circle cx="81.8" cy="65.6" r="1.8" fill="#ffffff"/>
+    <ellipse cx="64" cy="103" rx="6.5" ry="4.8" fill="#2a160a"/>
+    <ellipse cx="62" cy="101.4" rx="2" ry="1.2" fill="#ffffff" opacity="0.7"/>
+  </g>
+</svg>
