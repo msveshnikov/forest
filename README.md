@@ -1,4 +1,3 @@
-
 # Лесные друзья (Forest Friends)
 
 Уютная 3D-игра на Godot 4.7 (GDScript) про жизнь лесных зверей. Игрок выбирает одного из шести зверей
@@ -53,6 +52,7 @@ scp build/web/* build/android/ForestFriends.apk ubuntu@severance.lol:/var/www/se
 ```
 assets/models/      .glb из Blender (звери, деревья, камни, дома, рельеф, вода…)
 assets/data/        ресурсы AnimalStats (*_stats.tres), layout.json — раскладка леса
+assets/icons/       иконки Android (адаптивные слои 432×432 и основная 192×192), исходники SVG рядом; общая иконка — icon.svg
 scenes/animals/     animal_base.tscn + 6 наследованных сцен, player_controller.tscn, ai_controller.tscn
 scenes/environment/ обёртки моделей, источники еды (food_*.tscn), дома (home_*.tscn)
 scenes/world/       forest.tscn — главная локация, camera_rig.tscn
@@ -71,10 +71,9 @@ tools/*.py          генераторы сцен видов и forest.tscn из
 2. `python tools/gen_species.py` и `python tools/gen_forest.py`.
 
 ## Отладка
-
 Если в корне проекта лежит `debug_shots.json`, автозагрузка `DebugShots` делает скриншоты в `screenshots/`,
 может нажимать действия, ускорять время, ставить час суток, выбирать вид и вызывать методы сцены.
 Пример: `{"times":[5], "quit":6, "hour":22, "species":"wolf", "press":{"move_forward":[1,5]}}`.
 Тест еды и сна: `{"quit":16, "call":["debug_test_needs"]}` при запуске `forest.tscn`.
 Тест сенсорного управления: `{"quit":8, "call":["debug_test_touch"]}` при запуске `forest.tscn`.
-
+Файл в .gitignore.
