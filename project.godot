@@ -14,6 +14,7 @@ config/name="Forest Friends"
 run/main_scene="res://scenes/main.tscn"
 config/icon="res://icon.svg"
 config/features=PackedStringArray("4.7", "Mobile")
+config/icon="res://icon.svg"
 
 [display]
 

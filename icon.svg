@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
   <rect width="256" height="256" rx="48" fill="#2f5a2a"/>
   <circle cx="200" cy="58" r="26" fill="#f6d77a"/>
@@ -13,4 +14,70 @@
   <circle cx="145" cy="128" r="6" fill="#2a1a10"/>
   <circle cx="173" cy="128" r="6" fill="#2a1a10"/>
   <circle cx="159" cy="176" r="7" fill="#2a1a10"/>
+=======
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9fd8a4"/>
+      <stop offset="0.55" stop-color="#4f9a5c"/>
+      <stop offset="1" stop-color="#2c6a3a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.32" r="0.5">
+      <stop offset="0" stop-color="#fff6c8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#fff6c8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fur" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff9a3c"/>
+      <stop offset="1" stop-color="#e2621b"/>
+    </linearGradient>
+    <clipPath id="badge">
+      <rect x="4" y="4" width="120" height="120" rx="28"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#badge)">
+    <rect x="0" y="0" width="128" height="128" fill="url(#sky)"/>
+    <circle cx="64" cy="40" r="56" fill="url(#glow)"/>
+
+    <!-- far pines -->
+    <g fill="#3b7d48">
+      <path d="M14 104 L26 50 L38 104 Z"/>
+      <path d="M90 104 L102 46 L114 104 Z"/>
+      <path d="M-4 110 L6 66 L16 110 Z"/>
+      <path d="M112 110 L122 62 L132 110 Z"/>
+    </g>
+    <!-- near pines -->
+    <g fill="#245a31">
+      <path d="M0 124 L16 62 L32 124 Z"/>
+      <path d="M96 124 L112 58 L128 124 Z"/>
+    </g>
+    <!-- mossy ground -->
+    <path d="M0 112 Q64 96 128 112 L128 128 L0 128 Z" fill="#1d4a28"/>
+  </g>
+
+  <!-- fox -->
+  <g stroke="#3a1e0e" stroke-width="3" stroke-linejoin="round">
+    <!-- ears -->
+    <path d="M30 62 L34 20 L60 46 Z" fill="url(#fur)"/>
+    <path d="M98 62 L94 20 L68 46 Z" fill="url(#fur)"/>
+    <!-- head -->
+    <path d="M24 62 Q28 42 64 42 Q100 42 104 62 Q106 78 86 94 L64 112 L42 94 Q22 78 24 62 Z" fill="url(#fur)"/>
+  </g>
+  <!-- inner ears -->
+  <path d="M37 52 L39 31 L52 45 Z" fill="#3a1e0e"/>
+  <path d="M91 52 L89 31 L76 45 Z" fill="#3a1e0e"/>
+  <!-- white cheeks / muzzle -->
+  <path d="M26 68 Q44 68 55 84 Q59 90 64 90 Q69 90 73 84 Q84 68 102 68 Q98 82 85 93 L64 110 L43 93 Q30 82 26 68 Z" fill="#fff4e4"/>
+  <!-- eyes -->
+  <ellipse cx="48" cy="68" rx="5" ry="6.5" fill="#2a160a"/>
+  <ellipse cx="80" cy="68" rx="5" ry="6.5" fill="#2a160a"/>
+  <circle cx="49.8" cy="65.6" r="1.8" fill="#ffffff"/>
+  <circle cx="81.8" cy="65.6" r="1.8" fill="#ffffff"/>
+  <!-- nose -->
+  <ellipse cx="64" cy="103" rx="6.5" ry="4.8" fill="#2a160a"/>
+  <ellipse cx="62" cy="101.4" rx="2" ry="1.2" fill="#ffffff" opacity="0.7"/>
+
+  <!-- badge rim -->
+  <rect x="5.5" y="5.5" width="117" height="117" rx="26.5" fill="none" stroke="#183d21" stroke-width="3"/>
+>>>>>>> 04d03a1224857f515782ce6af4ea4b640f00bde9
 </svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="432" height="432" viewBox="0 0 108 108">
+  <!-- Android adaptive icon background: forest scene from res://icon.svg, full bleed -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9fd8a4"/>
+      <stop offset="0.55" stop-color="#4f9a5c"/>
+      <stop offset="1" stop-color="#2c6a3a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.34" r="0.42">
+      <stop offset="0" stop-color="#fff6c8" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#fff6c8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="108" height="108" fill="url(#sky)"/>
+  <circle cx="54" cy="36" r="46" fill="url(#glow)"/>
+  <g fill="#3b7d48">
+    <path d="M18 92 L28 46 L38 92 Z"/>
+    <path d="M70 92 L80 42 L90 92 Z"/>
+    <path d="M2 98 L11 58 L20 98 Z"/>
+    <path d="M88 98 L97 54 L106 98 Z"/>
+  </g>
+  <g fill="#245a31">
+    <path d="M8 108 L22 56 L36 108 Z"/>
+    <path d="M72 108 L86 52 L100 108 Z"/>
+  </g>
+  <path d="M0 86 Q54 74 108 86 L108 108 L0 108 Z" fill="#1d4a28"/>
+</svg>
