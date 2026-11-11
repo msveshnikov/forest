@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Лесные друзья (Forest Friends)
 
 Уютная 3D-игра на Godot 4.7 (GDScript) про жизнь лесных зверей. Игрок выбирает одного из шести зверей
@@ -71,13 +71,13 @@ tools/*.py          генераторы сцен видов и forest.tscn из
 2. `python tools/gen_species.py` и `python tools/gen_forest.py`.
 
 ## Отладка
+
 Если в корне проекта лежит `debug_shots.json`, автозагрузка `DebugShots` делает скриншоты в `screenshots/`,
 может нажимать действия, ускорять время, ставить час суток, выбирать вид и вызывать методы сцены.
 Пример: `{"times":[5], "quit":6, "hour":22, "species":"wolf", "press":{"move_forward":[1,5]}}`.
 Тест еды и сна: `{"quit":16, "call":["debug_test_needs"]}` при запуске `forest.tscn`.
 Тест сенсорного управления: `{"quit":8, "call":["debug_test_touch"]}` при запуске `forest.tscn`.
-Файл в .gitignore.
-=======
+
 # Лесные друзья (Forest Friends)
 
 Уютная 3D-игра на Godot 4.7 (GDScript) про жизнь лесных зверей. Игрок выбирает одного из шести зверей
@@ -139,5 +139,4 @@ tools/*.py          генераторы сцен видов и forest.tscn из
 может нажимать действия, ускорять время, ставить час суток, выбирать вид и вызывать методы сцены.
 Пример: `{"times":[5], "quit":6, "hour":22, "species":"wolf", "press":{"move_forward":[1,5]}}`.
 Тест еды и сна: `{"quit":16, "call":["debug_test_needs"]}` при запуске `forest.tscn`.
-Файл в .gitignore.
->>>>>>> 04d03a1224857f515782ce6af4ea4b640f00bde9
+
