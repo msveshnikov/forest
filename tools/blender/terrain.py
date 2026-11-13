@@ -1,5 +1,5 @@
 # Terrain, water and forest layout (positions exported to assets/data/layout.json).
-# Map follows concept_art location map: bear cave on a hill (NW) with a spring, stream flowing
+# Map follows concept/empty/forest_homes_empty.png: bear cave on a hill (NW) with a spring, stream flowing
 # through the forest to a pond (SE), fox burrow under roots (SW), wolf den on mossy rocks (W),
 # squirrel oak (NE), hare meadow (E), hedgehog leaf nest near the pond (SE).
 # Blender coords: x east, y north, z up.  Godot: (x, z, -y).

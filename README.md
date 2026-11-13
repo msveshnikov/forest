@@ -61,6 +61,8 @@ scenes/main.tscn    точка входа
 scripts/            GDScript
 tools/blender/      скрипты генерации моделей (запускаются в Blender через Blender MCP)
 tools/*.py          генераторы сцен видов и forest.tscn из layout.json
+concept/            референс-арт из ChatGPT (ключевой арт, лист зверей, дома); промпты и стайл-блок —
+                    в «Forest Friends — concept art and tasks.md». Godot его не импортирует (.gdignore)
 ```
 
 ## Как пересобрать ассеты
