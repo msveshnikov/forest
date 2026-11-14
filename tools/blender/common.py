@@ -164,6 +164,11 @@ def export_glb(path, objs, animations=False):
     bpy.context.view_layer.objects.active = objs[0]
     kw = dict(filepath=path, export_format='GLB', use_selection=True, export_yup=True,
               export_apply=False, export_animations=animations)
+    try:
+        bpy.ops.export_scene.gltf.get_rna_type().properties['export_vertex_color']
+        kw['export_vertex_color'] = 'ACTIVE'
+    except KeyError:
+        pass
     if animations:
         kw.update(export_animation_mode='NLA_TRACKS', export_skins=True, export_force_sampling=True,
                   export_reset_pose_bones=True, export_optimize_animation_size=False)
