@@ -40,8 +40,8 @@ func _process(delta: float) -> void:
 		_taken["hide"] = true
 		for nm in _cfg["hide"]:
 			var n := get_tree().current_scene.find_child(nm, true, false)
-			if n is Node3D:
-				(n as Node3D).visible = false
+			if n != null and "visible" in n:
+				n.set("visible", false)
 	if _cfg.has("call") and not _taken.has("call") and _t > 1.0:
 		_taken["call"] = true
 		for c in _cfg["call"]:
