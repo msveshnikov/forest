@@ -5,6 +5,11 @@
 
 **▶ Играть в браузере (ПК или телефон): https://severance.lol/5/** · **Android APK: https://severance.lol/5/ForestFriends.apk**
 
+**Скачать:** [последний релиз](https://github.com/msveshnikov/forest/releases/latest): Windows
+([ForestFriends.exe](https://github.com/msveshnikov/forest/releases/latest/download/ForestFriends.exe), один файл, без установки),
+Android ([ForestFriends.apk](https://github.com/msveshnikov/forest/releases/latest/download/ForestFriends.apk)),
+веб-сборка ([ForestFriends-web.zip](https://github.com/msveshnikov/forest/releases/latest/download/ForestFriends-web.zip)).
+
 ## Управление
 | Клавиша | Действие |
 |---|---|
@@ -22,11 +27,12 @@
 «Поймать» (только у хищников), «II» — пауза. Код: `scripts/touch_controls.gd`. На ПК можно проверить с аргументом `-- --touch`.
 
 ## Сборка и выкладка
-Пресеты `Web` и `Android` лежат в `export_presets.cfg`. На вебе и Android рендерер Compatibility, текстуры S3TC+ETC2,
+Пресеты `Web`, `Android` и `Windows Desktop` лежат в `export_presets.cfg` (exe одним файлом, игра встроена). На вебе и Android рендерер Compatibility, текстуры S3TC+ETC2,
 APK подписан debug-ключом, arm64, альбомная ориентация.
 ```
 godot --headless --path . --export-release "Web" build/web/index.html
 godot --headless --path . --export-debug "Android" build/android/ForestFriends.apk
+godot --headless --path . --export-release "Windows Desktop" build/windows/ForestFriends.exe
 scp build/web/* build/android/ForestFriends.apk ubuntu@severance.lol:/var/www/severance/5/
 ```
 
