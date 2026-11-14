@@ -76,5 +76,5 @@ func _update() -> void:
 	_env.ambient_light_energy = lerpf(0.3, 0.72, day)
 	_env.ambient_light_color = Color(0.45, 0.5, 0.75).lerp(Color(1.0, 0.96, 0.88), day)
 	_env.fog_light_color = FOG_NIGHT.lerp(FOG_DAY, day).lerp(FOG_DUSK, dusk * 0.7)
-	_env.fog_density = lerpf(0.018, 0.009, day)
+	_env.fog_density = lerpf(0.016, 0.0045, day)
 	_env.background_energy_multiplier = lerpf(0.4, 1.0, day)

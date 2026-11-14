@@ -3,9 +3,13 @@
 # through the forest to a pond (SE), fox burrow under roots (SW), wolf den on mossy rocks (W),
 # squirrel oak (NE), hare meadow (E), hedgehog leaf nest near the pond (SE).
 # Blender coords: x east, y north, z up.  Godot: (x, z, -y).
-import bpy, bmesh, math, random, json
+import bpy, bmesh, math, random, json, os, sys
 from math import sin, cos, pi, exp, hypot, atan2
 from mathutils import Vector, noise
+
+if 'BUILDERS' not in globals():   # headless: blender -b --factory-startup -P tools/blender/terrain.py
+    _d = os.path.dirname(os.path.abspath(sys.argv[sys.argv.index('-P') + 1])) if '-P' in sys.argv else os.path.dirname(__file__)
+    exec(open(os.path.join(_d, 'environment.py'), encoding='utf-8').read().split("if __name__ == \"__main__\":")[0])
 
 HALF = 50.0
 STREAM = [(-25.0, 25.0), (-20.0, 19.0), (-13.0, 14.0), (-6.0, 8.0), (0.0, 1.0), (4.0, -8.0), (8.0, -17.0), (11.0, -24.0)]
@@ -104,7 +108,62 @@ def water_level_stream(x, y):
     return terrain_h(cx, cy) + 0.38
 
 
-def build_terrain(res=1.25):
+def ground_color_fn(trees):
+    """Painted ground: grass patches, shade under trees, soft paths, sandy beds, moss on slopes."""
+    G = {k: lin_hex(C[k]) for k in ('grass', 'grass2', 'grass3', 'sand', 'bed', 'rock', 'moss', 'dirt')}
+    shade_col = lin_hex('#4C7A2E')
+    needle_col = lin_hex('#6E6A3C')
+    meadow_col = lin_hex('#9CC24E')
+    pebble = lin_hex('#8F8A78')
+    cell = 6.0
+    grid = {}
+    for (tx, ty, r, kind) in trees:
+        grid.setdefault((int(tx // cell), int(ty // cell)), []).append((tx, ty, r, kind))
+
+    def shade_at(x, y):
+        s, pine = 0.0, 0.0
+        cx, cy = int(x // cell), int(y // cell)
+        for i in (-1, 0, 1):
+            for j in (-1, 0, 1):
+                for (tx, ty, r, kind) in grid.get((cx + i, cy + j), ()):
+                    d2 = (x - tx) ** 2 + (y - ty) ** 2
+                    w = exp(-d2 / (2 * r * r))
+                    s += w
+                    if kind == 'tree_pine':
+                        pine += w
+        return min(1.0, s), min(1.0, pine)
+
+    def f(co, n):
+        x, y = co.x, co.y
+        nz = noise.noise(Vector((x * 0.06, y * 0.06, 2.0)))
+        nz2 = noise.noise(Vector((x * 0.21, y * 0.21, 5.0)))
+        c = G['grass2'].lerp(G['grass'], smoothstep(-0.4, 0.3, nz))
+        c = c.lerp(G['grass3'], smoothstep(0.15, 0.6, nz2) * 0.6)
+        dm = hypot(x - 30, y - 5)
+        c = c.lerp(meadow_col, (1 - smoothstep(6, 13, dm)) * 0.75)
+        sh, pine = shade_at(x, y)
+        c = c.lerp(shade_col, sh * 0.55)
+        c = c.lerp(needle_col, pine * 0.35)
+        # slopes: moss, then rock
+        slope = 1.0 - n.z
+        c = c.lerp(G['moss'], smoothstep(0.12, 0.25, slope) * 0.8)
+        c = c.lerp(G['rock'], smoothstep(0.3, 0.45, slope))
+        # paths with soft, noisy edges
+        dp = path_dist(x, y) + 0.35 * nz2
+        w = 1.0 - smoothstep(0.75, 1.55, dp)
+        sand = G['sand'] * (0.92 + 0.08 * noise.noise(Vector((x * 0.9, y * 0.9, 1.0))))
+        c = c.lerp(sand.lerp(G['dirt'], 0.25 * (1 - smoothstep(0.0, 0.5, dp))), w)
+        # stream bed and pond: wet sand / pebbles
+        ds = min(stream_dist(x, y), max(0.0, pond_dist(x, y) - POND[2]))
+        wb = 1.0 - smoothstep(1.6, 2.6, ds + 0.3 * nz2)
+        bed = G['bed'].lerp(pebble, smoothstep(-0.2, 0.4, noise.noise(Vector((x * 1.3, y * 1.3, 3.0)))))
+        c = c.lerp(bed, wb)
+        c = c * (0.96 + 0.06 * nz2)
+        return c
+    return f
+
+
+def build_terrain(res=1.0, trees=()):
     mb = MeshBuilder(200)
     bm = mb.bm
     n = int(2 * HALF / res) + 1
@@ -116,37 +175,36 @@ def build_terrain(res=1.25):
             y = -HALF + j * res
             row.append(bm.verts.new((x, y, terrain_h(x, y))))
         verts.append(row)
-    keys = dict(grass=mb._mi(mat('grass')), grass2=mb._mi(mat('grass2')), grass3=mb._mi(mat('grass3')),
-                sand=mb._mi(mat('sand')), bed=mb._mi(mat('bed')), rock=mb._mi(mat('rock')), moss=mb._mi(mat('moss')))
-    rng = random.Random(5)
+    gi = mb._mi(mat('grass'))
     for j in range(n - 1):
         for i in range(n - 1):
             v00, v10, v01, v11 = verts[j][i], verts[j][i + 1], verts[j + 1][i], verts[j + 1][i + 1]
             tris = [(v00, v10, v11), (v00, v11, v01)] if (i + j) % 2 == 0 else [(v00, v10, v01), (v10, v11, v01)]
             for tv in tris:
                 f = bm.faces.new(tv)
-                c = f.calc_center_median()
-                f.normal_update()
-                ds = stream_dist(c.x, c.y)
-                dp = pond_dist(c.x, c.y)
-                if ds < 2.3 or dp < POND[2] + 0.6:
-                    k = 'bed'
-                elif path_dist(c.x, c.y) < 1.25:
-                    k = 'sand'
-                elif f.normal.z < 0.72:
-                    k = 'rock' if f.normal.z < 0.6 else 'moss'
-                else:
-                    k = rng.choice(['grass', 'grass', 'grass2', 'grass3'])
-                f.material_index = keys[k]
-                f.smooth = False
-    return mb.to_object('Terrain-col')
+                f.material_index = gi
+                f.smooth = True
+    obj = mb.to_object('Terrain-col')
+    me = obj.data
+    fn = ground_color_fn(trees)
+    vc = [fn(v.co, v.normal) for v in me.vertices]
+    attr = me.color_attributes.new("Col", 'FLOAT_COLOR', 'CORNER')
+    for li, lp in enumerate(me.loops):
+        c = vc[lp.vertex_index]
+        attr.data[li].color = (min(1, c.x), min(1, c.y), min(1, c.z), 1.0)
+    me.color_attributes.active_color = attr
+    me.materials.clear()
+    me.materials.append(vc_mat('vc_ground', 0.95))
+    return obj
 
 
 def build_water():
+    """Stream ribbon (3 verts across) + pond fan. Vertex colour R = depth (0 at the banks, 1 in the
+    middle), read by assets/materials/water.gdshader."""
     mb = MeshBuilder(201)
     bm = mb.bm
-    wm = mb._mi(material('env_water', C['water'], rough=0.08, alpha=0.72))
-    # stream ribbon, densely sampled
+    wm = mb._mi(vc_mat('vc_water', 0.08, 0.8))
+    depth = {}
     pts = []
     for i in range(len(STREAM) - 1):
         a, b = Vector(STREAM[i]), Vector(STREAM[i + 1])
@@ -161,23 +219,55 @@ def build_water():
         w = 1.35 + 0.25 * sin(k * 0.7)
         z = water_level_stream(p.x, p.y)
         l = bm.verts.new((p.x + nrm.x * w, p.y + nrm.y * w, z))
+        c = bm.verts.new((p.x, p.y, z))
         r = bm.verts.new((p.x - nrm.x * w, p.y - nrm.y * w, z))
+        depth[l], depth[r], depth[c] = 0.0, 0.0, 0.75
         if prev:
-            f = bm.faces.new((prev[0], prev[1], r, l))
-            f.material_index = wm
-        prev = (l, r)
-    # pond disc
+            for fv in ((prev[0], prev[1], c, l), (prev[1], prev[2], r, c)):
+                f = bm.faces.new(fv)
+                f.material_index = wm
+        prev = (l, c, r)
     cz = terrain_h(POND[0], POND[1]) + 1.05
     center = bm.verts.new((POND[0], POND[1], cz))
-    ring = []
-    for i in range(28):
-        a = i / 28 * 2 * pi
+    depth[center] = 1.0
+    ring, mid = [], []
+    for i in range(32):
+        a = i / 32 * 2 * pi
         rr = POND[2] + 0.4 + 0.5 * sin(a * 3)
         ring.append(bm.verts.new((POND[0] + cos(a) * rr, POND[1] + sin(a) * rr, cz)))
-    for i in range(28):
-        f = bm.faces.new((center, ring[i], ring[(i + 1) % 28]))
-        f.material_index = wm
-    return mb.to_object('Water'), cz
+        mid.append(bm.verts.new((POND[0] + cos(a) * rr * 0.6, POND[1] + sin(a) * rr * 0.6, cz)))
+        depth[ring[-1]] = 0.0
+        depth[mid[-1]] = 0.7
+    for i in range(32):
+        j = (i + 1) % 32
+        for fv in ((center, mid[i], mid[j]), (mid[i], ring[i], ring[j], mid[j])):
+            f = bm.faces.new(fv)
+            f.material_index = wm
+    col = bm.loops.layers.float_color.new("Col")
+    for f in bm.faces:
+        for lp in f.loops:
+            dd = depth.get(lp.vert, 0.0)
+            lp[col] = (dd, dd, dd, 1.0)
+    obj = mb.to_object('Water')
+    attr = obj.data.color_attributes.get("Col")
+    obj.data.color_attributes.active_color = attr
+    try:
+        obj.data.color_attributes.render_color_index = obj.data.color_attributes.active_color_index
+    except Exception:
+        pass
+    obj.data.materials.clear()
+    obj.data.materials.append(vc_mat('vc_water', 0.08, 0.8))
+    return obj, cz
+
+
+def export_set_raw(fname, objs):
+    """export without the generic paint pass (terrain is painted by ground_color_fn)."""
+    root = bpy.data.objects.new(fname, None)
+    bpy.context.scene.collection.objects.link(root)
+    for o in objs:
+        o.parent = root
+    export_glb(f"{MODELS}/{fname}.glb", [root])
+    return fname, sum(tri_count(o) for o in objs)
 
 
 def g(x, y, z=None):
@@ -341,9 +431,9 @@ def make_layout():
         return stream_dist(x, y) > 2.4 and pond_dist(x, y) > POND[2] + 0.8 and path_dist(x, y) > 1.3 \
             and max(abs(x), abs(y)) < 46 and all(hypot(x - h['pos'][0], y - h['pos'][1]) > 3.0 for h in HOMES.values())
 
-    fol('grass_tuft', 1800, on_grass, 0.8, 1.6)
-    fol('flowers', 260, lambda x, y: on_grass(x, y) and (hypot(x - 30, y - 5) < 14 or rng.random() < 0.35))
-    fol('fern', 340, lambda x, y: on_grass(x, y) and (max(abs(x), abs(y)) > 15 or rng.random() < 0.3), 0.5, 0.95)
+    fol('grass_tuft', 3400, on_grass, 0.8, 1.6)
+    fol('flowers', 380, lambda x, y: on_grass(x, y) and (hypot(x - 30, y - 5) < 14 or rng.random() < 0.35))
+    fol('fern', 420, lambda x, y: on_grass(x, y) and (max(abs(x), abs(y)) > 15 or rng.random() < 0.3), 0.5, 0.95)
     fol('bush', 120, lambda x, y: free(x, y, 0.8), 0.8, 1.4)
     fol('reeds', 70, lambda x, y: POND[2] - 0.5 < pond_dist(x, y) < POND[2] + 1.6 or 1.5 < stream_dist(x, y) < 2.4, 0.8, 1.3)
     fol('mushroom_red', 60, on_grass, 0.6, 1.0)
@@ -352,14 +442,21 @@ def make_layout():
 
 
 def build_terrain_and_layout():
+    L = make_layout()
+    trees = [(t['pos'][0], -t['pos'][2], 3.2 * t.get('scale', 1.0) if t['scene'] != 'tree_oak' else 4.0, t['scene'])
+             for t in L['trees']]
     reset_scene()
-    t = build_terrain()
-    r1 = export_set('terrain', [t])
+    t = build_terrain(1.0, trees)
+    PAINT.pop('Terrain-col', None)
+    r1 = export_set_raw('terrain', [t])
     reset_scene()
     w, pond_z = build_water()
-    r2 = export_set('water', [w])
-    L = make_layout()
+    r2 = export_set_raw('water', [w])
     L['pond'] = g(POND[0], POND[1], pond_z)
     with open(PROJECT + '/assets/data/layout.json', 'w') as f:
         json.dump(L, f)
     return r1, r2, {k: (len(v) if isinstance(v, list) else {kk: len(vv) for kk, vv in v.items()}) for k, v in L.items()}
+
+
+if __name__ == "__main__" and '-P' in sys.argv and sys.argv[sys.argv.index('-P') + 1].endswith('terrain.py'):
+    print("TERRAIN", build_terrain_and_layout())

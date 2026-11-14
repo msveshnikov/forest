@@ -27,6 +27,23 @@ for name in SIMPLE:
 [node name="{camel(name)}" instance=ExtResource("1_model")]
 ''')
 
+# water: stylized shader on the stream/pond mesh
+write(os.path.join(ENV, "water.tscn"), '''[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/water.glb" id="1_model"]
+[ext_resource type="Shader" path="res://assets/materials/water.gdshader" id="2_shader"]
+
+[sub_resource type="ShaderMaterial" id="WaterMat"]
+render_priority = 0
+shader = ExtResource("2_shader")
+
+[node name="Water" instance=ExtResource("1_model")]
+
+[node name="Water" parent="water" index="0"]
+material_override = SubResource("WaterMat")
+cast_shadow = 0
+''')
+
 FOOD = {
     "food_berry_bush": ("berries", "Ягоды", 30, 360, "Berries", "berry_bush"),
     "food_mushroom": ("mushroom", "Грибы", 25, 300, "", "mushroom_red"),

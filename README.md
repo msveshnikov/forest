@@ -66,11 +66,30 @@ concept/            референс-арт из ChatGPT (день, ночь, л
 ```
 
 ## Как пересобрать ассеты
-1. В Blender через Blender MCP по очереди запустить `tools/blender/common.py`, затем:
-   - `animals.py` и `build_animal(name)`;
-   - `environment.py` и `build_all_props()`;
-   - `terrain.py` и `build_terrain_and_layout()`.
-2. `python tools/gen_species.py` и `python tools/gen_forest.py`.
+Всё делается скриптами в Blender без интерфейса (Blender 5.2: `C:\Program Files\Blender Foundation\Blender 5.2\blender.exe`;
+Godot 4.7.2: `%USERPROFILE%\OneDrive\Рабочий стол\Godot_v4.7.2-stable_win64.exe`):
+```
+blender -b --factory-startup -P tools/blender/animals.py -- fox wolf bear hare squirrel hedgehog [--render DIR]
+blender -b --factory-startup -P tools/blender/environment.py -- [имена…] [--render DIR]
+blender -b --factory-startup -P tools/blender/terrain.py
+python tools/gen_species.py && python tools/gen_forest.py && python tools/set_import_script.py
+godot --headless --path . --import
+```
+- **Звери** (`animals.py`): тело лепится из метаболов (сглаженные эллипсоиды) по параметрам вида, затем
+  упрощается до 5–8 тыс. треугольников. Окраска (брюшко, «носочки», кончик хвоста, уши, седло волка)
+  считается по частям тела и пишется в цвета вершин. Глаза, нос, кисточки белки и иглы ежа ставятся на
+  поверхность рейкастами. Скелет из 20–23 костей (позвоночник, шея, уши, хвост из 3 костей, ноги по 3 кости),
+  веса плавные и тоже берутся из частей тела. Анимации те же: idle, walk, run, eat, sleep, jump, attack.
+  Опция `--render DIR` сохраняет превью (сбоку, 3/4, спереди, ходьба, бег, сон, еда).
+- **Окружение** (`environment.py` + `paint.py`): кроны деревьев и кусты тоже из метаболов. «Покраска»
+  (`paint.py`) переводит цвета материалов в цвета вершин с мягким затенением снизу, светлыми верхушками,
+  шумом и пятнами мха, а все материалы модели сводит в один или два. Так меньше вызовов отрисовки.
+- **Карта** (`terrain.py`): сначала раскладка (`assets/data/layout.json`), потом рельеф. Земля
+  раскрашивается по положению: пятна травы, тень под деревьями, песчаные тропы с мягким краем,
+  дно ручья, мох на склонах, светлая поляна зайцев. В цвете вершин воды записана глубина (0 у берега,
+  1 в середине), её читает шейдер `assets/materials/water.gdshader`.
+- Цвета вершин в Godot включает скрипт импорта `scripts/import/vertex_color_import.gd`. Его прописывает
+  во все `.glb.import` `tools/set_import_script.py`, запускать после появления новых моделей.
 
 ## Отладка
 Если в корне проекта лежит `debug_shots.json`, автозагрузка `DebugShots` делает скриншоты в `screenshots/`,
@@ -78,4 +97,7 @@ concept/            референс-арт из ChatGPT (день, ночь, л
 Пример: `{"times":[5], "quit":6, "hour":22, "species":"wolf", "press":{"move_forward":[1,5]}}`.
 Тест еды и сна: `{"quit":16, "call":["debug_test_needs"]}` при запуске `forest.tscn`.
 Тест сенсорного управления: `{"quit":8, "call":["debug_test_touch"]}` при запуске `forest.tscn`.
+Ещё опции: `"views": [[t, x, y, z, lx, ly, lz], …]` ставит свободную камеру в (x, y, z) и смотрит на (lx, ly, lz)
+начиная с секунды t, `"hide": ["Foliage", "Trees", …]` прячет узлы сцены, `"novsync": true` отключает vsync
+для честного замера FPS. В лог пишутся FPS, число примитивов, вызовов отрисовки и время process/physics.
 Файл в .gitignore.
