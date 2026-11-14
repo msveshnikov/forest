@@ -59,5 +59,7 @@ All prompts are sent as `Generate an image:` + style block + subject + `no text`
   drew the animals standing upright like cartoon characters, which didn't match the quadruped models.
 - v2 (2026-11-13): the three images re-ordered from ChatGPT (one chat, the key art stays in it as the
   style reference): `forest_day`, `animals_sheet`, `forest_homes_empty`; old Gemini images removed.
-  `forest_night`, `world_map` and `title_screen` are still to do: the Free plan allows 3 images a day
-  (limit resets 2026-11-14 ~17:36). Continue in the same ChatGPT chat «Generate Forest Game Art».
+- v2.1 (2026-11-14): `forest_night`, `world_map` and `title_screen` added in the same ChatGPT chat
+  «Generate Forest Game Art» (the Free plan allows 3 images a day). The map is painted in a slight
+  isometric view and only roughly follows `layout.json`; for an in-game minimap, repaint a Blender
+  plan render and align it (skill reference 05). The full set from the table above is now done.
