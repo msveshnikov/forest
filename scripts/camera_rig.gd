@@ -25,7 +25,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		look(event.relative * mouse_sensitivity)
 	elif event is InputEventMouseButton and event.pressed:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		if event.button_index == MOUSE_BUTTON_LEFT and OS.has_feature("web") and not Game.touch:
+			Game.capture_mouse()
+		elif event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			zoom(0.9)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			zoom(1.1)
@@ -33,6 +35,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 ## Turns the camera: x is yaw and y is pitch, both in radians.
 func look(delta_rad: Vector2) -> void:
+	delta_rad *= Game.camera_sensitivity
 	rotation.y -= delta_rad.x
 	_pitch = clampf(_pitch - delta_rad.y, -1.2, 0.15)
 

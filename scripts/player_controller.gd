@@ -4,10 +4,11 @@ extends Node
 
 signal interaction_hint(text: String)
 
-const INTERACT_RADIUS := 1.6
+const INTERACT_RADIUS := 2.2
 
 var camera_rig: Node3D
 var _hint := ""
+var touch_action_key := "ACTION_DEFAULT"
 
 
 func control(a: Animal, _delta: float) -> void:
@@ -24,15 +25,9 @@ func control(a: Animal, _delta: float) -> void:
 	if a.sleeping and dir.length() > 0.1:
 		a.wake_up()
 
-	var hint := _find_interaction(a)
 	if Input.is_action_just_pressed(&"interact"):
 		_interact(a)
-	if Input.is_action_just_pressed(&"attack"):
-		var prey := _nearest_prey(a)
-		if prey:
-			a.start_attack(prey)
-		elif a.stats.is_predator:
-			a.start_attack(null)
+	var hint := _find_interaction(a)
 	if hint != _hint:
 		_hint = hint
 		interaction_hint.emit(hint)
@@ -47,6 +42,8 @@ func _interact(a: Animal) -> void:
 	if a.sleeping:
 		a.wake_up()
 		return
+	if a.is_busy():
+		return
 	if _near_home(a):
 		a.start_sleep()
 		return
@@ -56,54 +53,41 @@ func _interact(a: Animal) -> void:
 
 
 func _find_interaction(a: Animal) -> String:
+	touch_action_key = "ACTION_DEFAULT"
 	if a.sleeping:
-		return "[E] Проснуться"
+		return _action_hint("ACTION_WAKE", "TOUCH_WAKE")
 	if a.is_busy():
 		return ""
-	var prey := _nearest_prey(a)
-	if prey:
-		return "[F / ЛКМ] Поймать: %s" % prey.stats.display_name
 	if _near_home(a):
-		return "[E] Лечь спать дома"
+		return _action_hint("ACTION_SLEEP", "TOUCH_SLEEP")
 	var food := _nearest_food(a)
 	if food:
-		return "[E] Съесть: %s" % food.display_name
-	var any_food := _nearest_food(a, true)
-	if any_food:
-		return "%s — %s такое не ест" % [any_food.display_name, a.stats.display_name]
+		touch_action_key = "TOUCH_EAT"
+		return _key_hint("E", tr("ACTION_EAT") % food.localized_name())
 	return ""
+
+
+func _action_hint(key: String, touch_key: String) -> String:
+	touch_action_key = touch_key
+	return _key_hint("E", tr(key))
+
+
+func _key_hint(key: String, label: String) -> String:
+	return label if Game.touch else "[%s] %s" % [key, label]
 
 
 func _near_home(a: Animal) -> bool:
 	return a.home != null and a.home.is_inside(a.global_position)
 
 
-func _nearest_food(a: Animal, any := false) -> Node:
-	var best: Node = null
-	var best_d := INTERACT_RADIUS + 0.5 * a.stats.attack_range
+func _nearest_food(a: Animal) -> FoodSource:
+	var best: FoodSource = null
+	var best_d := INTERACT_RADIUS
 	for f in a.get_tree().get_nodes_in_group(&"food"):
-		if not f.is_available():
-			continue
-		if not any and not a.can_eat(f):
+		if not a.can_eat(f) or f.is_reserved_for_other(a):
 			continue
 		var d: float = f.global_position.distance_to(a.global_position)
 		if d < best_d:
 			best_d = d
 			best = f
-	return best
-
-
-func _nearest_prey(a: Animal) -> Animal:
-	if not a.stats.is_predator:
-		return null
-	var best: Animal = null
-	var best_d := a.stats.attack_range + 0.8
-	for o in a.get_tree().get_nodes_in_group(&"animals"):
-		var other := o as Animal
-		if other == null or not a.can_hunt(other):
-			continue
-		var d := other.global_position.distance_to(a.global_position)
-		if d < best_d:
-			best_d = d
-			best = other
 	return best

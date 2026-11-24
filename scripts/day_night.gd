@@ -10,13 +10,13 @@ const SKY_DAY_TOP := Color(0.42, 0.66, 0.9)
 const SKY_DAY_HORIZON := Color(0.93, 0.92, 0.8)
 const SKY_DUSK_TOP := Color(0.36, 0.38, 0.62)
 const SKY_DUSK_HORIZON := Color(1.0, 0.62, 0.38)
-const SKY_NIGHT_TOP := Color(0.03, 0.05, 0.13)
-const SKY_NIGHT_HORIZON := Color(0.09, 0.13, 0.25)
+const SKY_NIGHT_TOP := Color(0.18, 0.24, 0.43)
+const SKY_NIGHT_HORIZON := Color(0.43, 0.50, 0.72)
 const SUN_DAY := Color(1.0, 0.93, 0.78)
 const SUN_DUSK := Color(1.0, 0.6, 0.35)
 const FOG_DAY := Color(0.85, 0.88, 0.75)
 const FOG_DUSK := Color(0.85, 0.62, 0.48)
-const FOG_NIGHT := Color(0.07, 0.1, 0.2)
+const FOG_NIGHT := Color(0.38, 0.45, 0.64)
 
 var _sun: DirectionalLight3D
 var _moon: DirectionalLight3D
@@ -62,7 +62,7 @@ func _update() -> void:
 	_sun.light_energy = smoothstep(0.0, 0.25, day) * 1.25
 	_sun.light_color = SUN_DUSK.lerp(SUN_DAY, smoothstep(0.1, 0.55, day))
 	_sun.visible = _sun.light_energy > 0.01
-	_moon.light_energy = night * 0.22
+	_moon.light_energy = night * 0.42
 	_moon.visible = night > 0.01
 
 	var top := SKY_NIGHT_TOP.lerp(SKY_DAY_TOP, day).lerp(SKY_DUSK_TOP, dusk * 0.6)
@@ -73,8 +73,8 @@ func _update() -> void:
 	_sky.ground_bottom_color = top.darkened(0.5)
 	_sky.sun_angle_max = 30.0
 
-	_env.ambient_light_energy = lerpf(0.3, 0.72, day)
-	_env.ambient_light_color = Color(0.45, 0.5, 0.75).lerp(Color(1.0, 0.96, 0.88), day)
+	_env.ambient_light_energy = lerpf(0.68, 0.78, day)
+	_env.ambient_light_color = Color(0.72, 0.80, 1.0).lerp(Color(1.0, 0.96, 0.88), day)
 	_env.fog_light_color = FOG_NIGHT.lerp(FOG_DAY, day).lerp(FOG_DUSK, dusk * 0.7)
-	_env.fog_density = lerpf(0.016, 0.0045, day)
-	_env.background_energy_multiplier = lerpf(0.4, 1.0, day)
+	_env.fog_density = lerpf(0.008, 0.0045, day)
+	_env.background_energy_multiplier = lerpf(0.82, 1.0, day)

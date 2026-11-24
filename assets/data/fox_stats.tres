@@ -5,18 +5,12 @@
 [resource]
 script = ExtResource("1_stats")
 species = &"fox"
-display_name = "Лиса"
-description = "Хитрая и ловкая. Охотится на зайцев и белок, любит ягоды и жуков."
 walk_speed = 2.0
 run_speed = 6.5
 jump_velocity = 4.6
-is_predator = true
-prey = Array[StringName]([&"hare", &"squirrel"])
-diet = Array[StringName]([&"berries", &"insects", &"meat"])
+diet = Array[StringName]([&"berries"])
 home_id = &"fox_burrow"
 nocturnal = false
-sense_radius = 12
-attack_range = 0.7
 hunger_rate = 0.315
 camera_distance = 2.6
 camera_height = 0.45

@@ -2,21 +2,16 @@ class_name AIController
 extends Node
 ## Controller component: simple state machine that lets an animal live on its own.
 
-enum State { WANDER, SEEK_FOOD, EAT, GO_HOME, SLEEP, FLEE, CHASE }
+enum State { WANDER, SEEK_FOOD, EAT, GO_HOME, SLEEP }
 
 const THINK_INTERVAL := 0.35
 const WANDER_RADIUS := 22.0
-const CHASE_TIME := 9.0
 const REACH_DIST := 0.9
 
 var state := State.WANDER
 var _think := 0.0
 var _idle := 0.0
 var _target_food: Node
-var _threat: Animal
-var _prey: Animal
-var _chase_left := 0.0
-var _chase_cooldown := 0.0
 var _goal := Vector3.ZERO
 var _has_goal := false
 var _stuck_time := 0.0
@@ -34,7 +29,6 @@ func state_name() -> String:
 
 
 func control(a: Animal, delta: float) -> void:
-	_chase_cooldown = maxf(0.0, _chase_cooldown - delta)
 	_think -= delta
 	if _think <= 0.0:
 		_think = THINK_INTERVAL
@@ -44,23 +38,6 @@ func control(a: Animal, delta: float) -> void:
 
 # ------------------------------------------------------------------ decisions
 func _decide(a: Animal) -> void:
-	var threat := _find_threat(a)
-	if threat:
-		if a.sleeping:
-			if threat.global_position.distance_to(a.global_position) < a.stats.sense_radius * 0.5 and not a.hidden_in_home:
-				a.wake_up()
-			else:
-				return
-		_threat = threat
-		_set_state(a, State.FLEE)
-		return
-	if state == State.FLEE:
-		if _threat and is_instance_valid(_threat) \
-				and _threat.global_position.distance_to(a.global_position) < a.stats.sense_radius * 1.4:
-			return
-		_threat = null
-		_set_state(a, State.WANDER)
-
 	match state:
 		State.SLEEP:
 			if a.fatigue <= 1.0 and not _should_be_resting(a):
@@ -71,25 +48,12 @@ func _decide(a: Animal) -> void:
 			if not a.is_busy():
 				_set_state(a, State.WANDER)
 			return
-		State.CHASE:
-			if _prey == null or not is_instance_valid(_prey) or _prey.hidden_in_home or _chase_left <= 0.0:
-				_prey = null
-				_chase_cooldown = 12.0
-				_set_state(a, State.WANDER)
-			return
 
 	if a.fatigue > 80.0 or (_should_be_resting(a) and a.fatigue > 25.0):
 		if state != State.GO_HOME:
 			_set_state(a, State.GO_HOME)
 		return
 
-	if a.stats.is_predator and a.hunger > 45.0 and _chase_cooldown <= 0.0:
-		var prey := _find_prey(a)
-		if prey:
-			_prey = prey
-			_chase_left = CHASE_TIME
-			_set_state(a, State.CHASE)
-			return
 
 	if a.hunger > 40.0 and state != State.SEEK_FOOD:
 		var food := _find_food(a)
@@ -119,8 +83,6 @@ func _set_state(a: Animal, s: State) -> void:
 		State.GO_HOME:
 			if a.home:
 				_go_to(a, a.home.sleep_spot())
-		State.FLEE:
-			_flee_goal(a)
 
 
 # ------------------------------------------------------------------ acting
@@ -140,7 +102,7 @@ func _act(a: Animal, delta: float) -> void:
 			if _target_food == null or not _target_food.is_available() or _target_food.is_reserved_for_other(a):
 				_set_state(a, State.WANDER)
 				return
-			if _flat_dist(a.global_position, _target_food.global_position) < 1.1 + a.stats.attack_range * 0.3:
+			if _flat_dist(a.global_position, _target_food.global_position) < 1.4:
 				if a.start_eating(_target_food):
 					_set_state(a, State.EAT)
 				else:
@@ -155,24 +117,6 @@ func _act(a: Animal, delta: float) -> void:
 				_set_state(a, State.SLEEP)
 			elif _follow_path(a, delta):
 				_go_to(a, a.home.sleep_spot())
-		State.FLEE:
-			a.running = true
-			if _follow_path(a, delta):
-				_flee_goal(a)
-		State.CHASE:
-			_chase_left -= delta
-			a.running = true
-			if _prey and is_instance_valid(_prey):
-				var d := _flat_dist(a.global_position, _prey.global_position)
-				if d < a.stats.attack_range + 0.4:
-					a.start_attack(_prey)
-					_chase_cooldown = 20.0
-					_prey = null
-					_set_state(a, State.WANDER)
-					return
-				if not _has_goal or _goal.distance_to(_prey.global_position) > 1.5:
-					_go_to(a, _prey.global_position)
-				_follow_path(a, delta)
 		State.SLEEP, State.EAT:
 			pass
 
@@ -218,22 +162,6 @@ func _go_to(a: Animal, p: Vector3) -> void:
 	a.nav_agent.target_position = p
 
 
-func _flee_goal(a: Animal) -> void:
-	var away := Vector3.FORWARD.rotated(Vector3.UP, _rng.randf() * TAU)
-	if _threat and is_instance_valid(_threat):
-		away = a.global_position - _threat.global_position
-		away.y = 0.0
-		away = away.normalized().rotated(Vector3.UP, _rng.randf_range(-0.6, 0.6))
-	var p := a.global_position + away * 12.0
-	# prefer running home if home is roughly away from the threat
-	if a.home:
-		var to_home := a.home.sleep_spot() - a.global_position
-		to_home.y = 0.0
-		if to_home.length() < 30.0 and to_home.normalized().dot(away) > 0.2:
-			p = a.home.sleep_spot()
-	_go_to(a, _clamp_to_world(p))
-
-
 func _random_point_near_home(a: Animal) -> Vector3:
 	var center := a.home.sleep_spot() if a.home else a.global_position
 	if _rng.randf() < 0.3:
@@ -247,37 +175,6 @@ func _clamp_to_world(p: Vector3) -> Vector3:
 	p.x = clampf(p.x, -44.0, 44.0)
 	p.z = clampf(p.z, -44.0, 44.0)
 	return p
-
-
-# ------------------------------------------------------------------ senses
-func _find_threat(a: Animal) -> Animal:
-	var best: Animal = null
-	var best_d := a.stats.sense_radius
-	for o in a.get_tree().get_nodes_in_group(&"animals"):
-		var other := o as Animal
-		if other == null or other == a or other.hidden_in_home or other.sleeping:
-			continue
-		if not other.stats.prey.has(a.stats.species):
-			continue
-		var d := other.global_position.distance_to(a.global_position)
-		if d < best_d:
-			best_d = d
-			best = other
-	return best
-
-
-func _find_prey(a: Animal) -> Animal:
-	var best: Animal = null
-	var best_d := a.stats.sense_radius
-	for o in a.get_tree().get_nodes_in_group(&"animals"):
-		var other := o as Animal
-		if other == null or not a.can_hunt(other):
-			continue
-		var d := other.global_position.distance_to(a.global_position)
-		if d < best_d:
-			best_d = d
-			best = other
-	return best
 
 
 func _find_food(a: Animal) -> Node:

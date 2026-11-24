@@ -1,11 +1,41 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/main_menu.gd" id="1_menu"]
 [ext_resource type="Theme" path="res://scenes/ui/ui_theme.tres" id="2_theme"]
-[ext_resource type="Texture2D" path="res://assets/ui/title_screen.jpg" id="3_bg"]
+[ext_resource type="Texture2D" path="res://assets/ui/woodland_title.jpg" id="3_bg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/menu_options.tscn" id="4_options"]
+
+[sub_resource type="SystemFont" id="TitleFont"]
+font_names = PackedStringArray("Georgia", "Noto Serif", "DejaVu Serif")
+font_weight = 700
+
+[sub_resource type="StyleBoxFlat" id="Card"]
+bg_color = Color(0.055, 0.092, 0.066, 0.91)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.78, 0.64, 0.39, 0.44)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_left = 24
+corner_radius_bottom_right = 24
+content_margin_left = 40.0
+content_margin_top = 34.0
+content_margin_right = 40.0
+content_margin_bottom = 34.0
+shadow_color = Color(0, 0, 0, 0.40)
+shadow_size = 20
+shadow_offset = Vector2(0, 10)
+
+[sub_resource type="StyleBoxFlat" id="Play"]
+bg_color = Color(0.93, 0.72, 0.40, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
 
 [node name="MainMenu" type="Control"]
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -14,46 +44,86 @@ grow_vertical = 2
 theme = ExtResource("2_theme")
 script = ExtResource("1_menu")
 
-[node name="Backdrop" type="ColorRect" parent="."]
-layout_mode = 1
+[node name="Background" type="TextureRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.09, 0.13, 0.06, 1)
-
-[node name="Background" type="TextureRect" parent="."]
-unique_name_in_owner = true
-layout_mode = 0
+mouse_filter = 2
 texture = ExtResource("3_bg")
 expand_mode = 1
-stretch_mode = 0
+stretch_mode = 6
 
-[node name="Buttons" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -267.0
-offset_top = -96.0
-offset_right = 267.0
-offset_bottom = -34.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="Card" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 84.0
+offset_top = -257.0
+offset_right = 630.0
+offset_bottom = 257.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("Card")
+
+[node name="Content" type="VBoxContainer" parent="Card"]
+layout_mode = 2
 alignment = 1
-theme_override_constants/separation = 14
+theme_override_constants/separation = 13
 
-[node name="PlayButton" type="Button" parent="Buttons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 62)
+[node name="Title" type="Label" parent="Card/Content"]
 layout_mode = 2
-text = "Играть"
+theme_override_colors/font_color = Color(1, 0.92, 0.73, 1)
+theme_override_fonts/font = SubResource("TitleFont")
+theme_override_font_sizes/font_size = 58
+autowrap_mode = 3
+text = "GAME_TITLE"
 
-[node name="QuitButton" type="Button" parent="Buttons"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 62)
+[node name="Lead" type="Label" parent="Card/Content"]
 layout_mode = 2
-text = "Выход"
+theme_override_colors/font_color = Color(0.86, 0.89, 0.77, 1)
+theme_override_font_sizes/font_size = 24
+autowrap_mode = 3
+text = "MENU_LEAD"
+
+[node name="Gap" type="Control" parent="Card/Content"]
+layout_mode = 2
+mouse_filter = 2
+custom_minimum_size = Vector2(0, 10)
+
+[node name="PlayButton" type="Button" parent="Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 66)
+theme_override_colors/font_color = Color(0.16, 0.11, 0.06, 1)
+theme_override_colors/font_hover_color = Color(0.16, 0.11, 0.06, 1)
+theme_override_colors/font_focus_color = Color(0.16, 0.11, 0.06, 1)
+theme_override_colors/font_pressed_color = Color(0.16, 0.11, 0.06, 1)
+theme_override_styles/normal = SubResource("Play")
+theme_override_styles/hover = SubResource("Play")
+text = "MENU_PLAY"
+
+[node name="Actions" type="HBoxContainer" parent="Card/Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SettingsButton" type="Button" parent="Card/Content/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+size_flags_horizontal = 3
+text = "MENU_SETTINGS"
+
+[node name="ControlsButton" type="Button" parent="Card/Content/Actions"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 54)
+size_flags_horizontal = 3
+text = "MENU_CONTROLS"
+
+[node name="QuitButton" type="Button" parent="Card/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(0, 52)
+text = "MENU_QUIT"
+
+[node name="Options" parent="." instance=ExtResource("4_options")]
+unique_name_in_owner = true

@@ -26,10 +26,9 @@ var _was_blocked := false
 
 ## id, action, offset from the bottom-right corner (or from the top-right with "top"), radius, label
 var buttons := [
-	{"id": "interact", "action": &"interact", "off": Vector2(-160, -165), "r": 84.0, "label": "Действие"},
-	{"id": "jump", "action": &"jump", "off": Vector2(-335, -110), "r": 58.0, "label": "Прыжок"},
-	{"id": "attack", "action": &"attack", "off": Vector2(-140, -350), "r": 64.0, "label": "Поймать"},
-	{"id": "pause", "event": &"pause", "off": Vector2(-62, 0), "top": 118.0, "r": 40.0, "label": "II"},
+	{"id": "interact", "action": &"interact", "off": Vector2(-160, -165), "r": 84.0, "label": "ACTION_DEFAULT"},
+	{"id": "jump", "action": &"jump", "off": Vector2(-335, -110), "r": 58.0, "label": "TOUCH_JUMP"},
+	{"id": "pause", "event": &"pause", "off": Vector2(-62, 0), "top": 64.0, "r": 40.0, "label": "II"},
 ]
 
 
@@ -52,13 +51,6 @@ func _blocked() -> bool:
 	return get_tree().paused or _player() == null
 
 
-func _visible_button(b: Dictionary) -> bool:
-	if b["id"] == "attack":
-		var p := _player()
-		return p != null and p.stats.is_predator
-	return true
-
-
 func _center(b: Dictionary) -> Vector2:
 	var s := pad.size
 	if b.has("top"):
@@ -68,7 +60,7 @@ func _center(b: Dictionary) -> Vector2:
 
 func _button_at(p: Vector2) -> Dictionary:
 	for b in buttons:
-		if _visible_button(b) and p.distance_to(_center(b)) <= b["r"] * 1.15:
+		if p.distance_to(_center(b)) <= b["r"] * 1.15:
 			return b
 	return {}
 
@@ -200,7 +192,7 @@ func _release_later(action: StringName) -> void:
 
 
 func release_all() -> void:
-	for a in MOVE_ACTIONS + [&"run", &"jump", &"interact", &"attack"]:
+	for a in MOVE_ACTIONS + [&"run", &"jump", &"interact"]:
 		Input.action_release(a)
 	_held.clear()
 	_look.clear()
@@ -220,22 +212,15 @@ func _process(_delta: float) -> void:
 		pad.queue_redraw()
 
 
-## Short label for the interact button, taken from the player's current interaction hint.
+## Short label for the interact button, keyed by the player's current action.
 func _interact_label() -> String:
 	var p := _player()
 	if p == null:
 		return ""
-	if p.sleeping:
-		return "Встать"
 	var pc := p.controller as PlayerController
-	if pc == null:
+	if pc == null or pc.touch_action_key == "ACTION_DEFAULT":
 		return ""
-	var h := pc.current_hint()
-	if h.contains("спать"):
-		return "Спать"
-	if h.contains("Съесть"):
-		return "Съесть"
-	return ""
+	return tr(pc.touch_action_key)
 
 
 # ---------------------------------------------------------------- drawing
@@ -253,15 +238,13 @@ func _draw_pad() -> void:
 		knob = o + (_stick_finger - _stick_origin).limit_length(STICK_R)
 	pad.draw_circle(knob, 44.0, Color(1.0, 0.93, 0.78, 0.6 if active else 0.3))
 	if active and _running:
-		_text("Бег", o + Vector2(0, -STICK_R * RUN_AT - 24), 24, Color(1.0, 0.85, 0.5, 0.9))
+		_text(tr("TOUCH_RUN"), o + Vector2(0, -STICK_R * RUN_AT - 24), 24, Color(1.0, 0.85, 0.5, 0.9))
 	elif not active:
-		_text("Идти", o + Vector2(0, STICK_R + 28), 24, Color(1.0, 0.95, 0.85, 0.5))
+		_text(tr("TOUCH_WALK"), o + Vector2(0, STICK_R + 28), 24, Color(1.0, 0.95, 0.85, 0.5))
 
 	# Buttons
 	var act := _interact_label()
 	for b in buttons:
-		if not _visible_button(b):
-			continue
 		var c := _center(b)
 		var r: float = b["r"]
 		var down := false
@@ -270,7 +253,7 @@ func _draw_pad() -> void:
 				down = true
 		var bg := Color(0.16, 0.11, 0.07, 0.68 if down else 0.45)
 		var edge := Color(0.95, 0.75, 0.4, 0.95 if down else 0.6)
-		var label: String = b["label"]
+		var label := tr(b["label"])
 		if b["id"] == "interact":
 			if act != "":
 				var pulse := 0.5 + 0.5 * sin(Time.get_ticks_msec() / 170.0)

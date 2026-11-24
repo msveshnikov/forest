@@ -23,6 +23,10 @@ func is_available() -> bool:
 	return _available
 
 
+func localized_name() -> String:
+	return tr("FOOD_" + String(food_type).to_upper())
+
+
 func is_reserved_for_other(who: Node) -> bool:
 	return _reserved_by != null and is_instance_valid(_reserved_by) and _reserved_by != who
 

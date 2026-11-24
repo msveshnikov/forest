@@ -11,6 +11,7 @@ const POPULATION := {
 const PLAYER_CONTROLLER := preload("res://scenes/animals/player_controller.tscn")
 const AI_CONTROLLER := preload("res://scenes/animals/ai_controller.tscn")
 const CAMERA_RIG := preload("res://scenes/world/camera_rig.tscn")
+const TRAIL_ENTRANCE := Vector3(-15.0, 0.8, 18.0)
 
 @onready var nav_region: NavigationRegion3D = $NavigationRegion3D
 @onready var animals_root: Node3D = $Animals
@@ -18,6 +19,7 @@ const CAMERA_RIG := preload("res://scenes/world/camera_rig.tscn")
 
 var player: Animal
 var camera_rig: Node3D
+var trail: ForestTrail
 var homes := {}
 
 
@@ -39,6 +41,10 @@ func _ready() -> void:
 		_add_touch_controls()
 	else:
 		Game.touch_mode_changed.connect(_add_touch_controls, CONNECT_ONE_SHOT)
+
+
+func _exit_tree() -> void:
+	Game.player = null
 
 
 var touch_controls: CanvasLayer
@@ -74,6 +80,8 @@ func _spawn(sp: StringName) -> Animal:
 func _spawn_player(sp: StringName) -> void:
 	player = _spawn(sp)
 	player.name = "Player_" + String(sp)
+	player.position = TRAIL_ENTRANCE
+	player.rotation.y = 0.0
 	var pc: PlayerController = PLAYER_CONTROLLER.instantiate()
 	player.set_controller(pc)
 	player.hunger = 25.0
@@ -82,9 +90,13 @@ func _spawn_player(sp: StringName) -> void:
 	add_child(camera_rig)
 	camera_rig.attach(player)
 	pc.camera_rig = camera_rig
+	trail = ForestTrail.new()
+	trail.player = player
+	add_child(trail)
 	Game.player = player
 	if hud:
 		hud.bind_player(player, pc)
+		hud.bind_trail(trail, camera_rig)
 	player_spawned.emit(player)
 
 

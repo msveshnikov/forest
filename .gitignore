@@ -1,5 +1,7 @@
 .godot/
 *.blend1
 /build/
+/android/
 screenshots/
 debug_shots.json
+/assets/data/strings.*.translation

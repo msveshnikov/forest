@@ -30,5 +30,5 @@ offset_top = -30.0
 offset_right = 300.0
 offset_bottom = 30.0
 theme_override_font_sizes/font_size = 36
-text = "Лес просыпается..."
+text = "MENU_LOADING"
 horizontal_alignment = 1

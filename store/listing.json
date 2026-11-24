@@ -1,0 +1,22 @@
+{
+  "packageName": "com.maxsoft.forestfriends",
+  "defaultLanguage": "en-US",
+  "category": "Adventure",
+  "targetAudience": "Ages 5 and under",
+  "price": "Free",
+  "privacyPolicy": "https://maxims.top/forest/privacy.html",
+  "listings": {
+    "en-US": {
+      "title": "Forest Friends",
+      "shortDescription": "A gentle forest adventure for ages 3+. Follow the sparkles and meet fireflies.",
+      "fullDescription": "Choose a fox, hare, bear, wolf, squirrel or hedgehog and take a peaceful walk through the forest.\n\nFollow the golden sparkles to gather kindling. Find the wooden bridge, the old oak and the hare meadow. Walk up to the lantern to light it and welcome the fireflies.\n\nThe trail is designed for young children. Walk up to a marker to complete a task, and explore at your own pace. There are no timers, fights or penalty screens.\n\nPlay offline in English or Russian. No ads, purchases or sign-in.",
+      "releaseNotes": "Take a peaceful forest walk, follow the golden markers and light the lantern for the fireflies. Available in English and Russian."
+    },
+    "ru-RU": {
+      "title": "Лесные друзья",
+      "shortDescription": "Добрая прогулка для детей от 3 лет. Иди за огоньками и встреть светлячков.",
+      "fullDescription": "Выбери лису, зайца, медведя, волка, белку или ежа и отправляйся гулять по лесу.\n\nИди за золотыми огоньками, чтобы собрать хворост. Найди деревянный мост, старый дуб и заячий луг. Подойди к фонарю, чтобы зажечь его и увидеть светлячков.\n\nИгра рассчитана на маленьких детей. Достаточно подойти к цели, чтобы выполнить задание. По лесу можно гулять в своём темпе, без таймеров, драк и штрафов.\n\nИгра работает офлайн на русском и английском языках. Без рекламы, покупок и регистрации.",
+      "releaseNotes": "Прогуляйся по лесу, найди золотые огоньки и зажги фонарь для светлячков. Игра на русском и английском."
+    }
+  }
+}

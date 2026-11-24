@@ -8,7 +8,7 @@
 #   exec(open(r".../tools/blender/animals.py").read()); build_animal("fox")
 #
 # Conventions (unchanged from v1, Godot relies on them): animal faces +Y in Blender, feet at z=0,
-# metres; one Armature object with NLA tracks idle, walk, run, eat, sleep, jump (+ attack for predators).
+# metres; one Armature object with NLA tracks idle, walk, run, eat, sleep, jump.
 import bpy, bmesh, math, os, sys, random
 from math import sin, cos, pi
 from mathutils import Vector, Matrix, Euler, Quaternion, noise
@@ -99,7 +99,6 @@ SPECIES = {
                   nose='#1A120E', spine_root='#3B2A1E', spine_tip='#E6D2B0', coat='#5A4231')),
 }
 
-PREDATORS = ('wolf', 'fox', 'bear')
 LEGS = ('fl', 'fr', 'bl', 'br')
 
 
@@ -763,15 +762,8 @@ def anims(name, P, g):
                       leg_pose('bl', 0.1, 0.9), leg_pose('br', 0.15, 0.9)))
     jump_keys = [(0.0, {}), (0.16, crouch), (0.38, stretch), (0.7, tuck), (1.0, {})]
 
-    pounce_back = {'root': ((0, 0, 0), (0, -P['ry'] * 0.15, -lift_h * 0.08)), 'spine1': R(-0.05), 'neck': R(0.25),
-                   'head': R(0.15)}
-    pounce_back.update(merge(leg_pose('bl', 0.1, 0.6), leg_pose('br', 0.1, 0.6)))
-    strike = {'root': ((0, 0, 0), (0, P['ry'] * 0.35, lift_h * 0.1)), 'spine2': R(0.25), 'neck': R(-0.3), 'head': R(-0.35)}
-    strike.update(merge(leg_pose('fl', 1.1, 0.5), leg_pose('fr', 0.95, 0.5),
-                        leg_pose('bl', -0.6, 0.0), leg_pose('br', -0.55, 0.0)))
-    attack_keys = [(0.0, {}), (0.3, pounce_back), (0.55, strike), (1.0, {})]
     return [('idle', 48, idle), ('walk', 24, walk), ('run', 16, run), ('eat', 32, eat), ('sleep', 48, sleep),
-            ('jump', 18, lambda p: lerp_pose(jump_keys, p)), ('attack', 16, lambda p: lerp_pose(attack_keys, p))]
+            ('jump', 18, lambda p: lerp_pose(jump_keys, p))]
 
 
 # ------------------------------------------------------------------ main
@@ -789,8 +781,6 @@ def build_animal(name, export=True):
     arm = build_rig(name, P, obj, g)
     bpy.context.view_layer.objects.active = arm
     for an, length, fn in anims(name, P, g):
-        if an == 'attack' and name not in PREDATORS:
-            continue
         make_action(arm, an, length, fn, step=2)
     apply_pose(arm, {})
     bpy.context.scene.frame_set(1)

@@ -12,9 +12,8 @@ config_version=5
 
 config/name="Forest Friends"
 run/main_scene="res://scenes/main.tscn"
-config/icon="res://icon.svg"
 config/features=PackedStringArray("4.7", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://assets/icons/forest_friends.png"
 
 [display]
 
@@ -45,3 +44,7 @@ DebugShots="*res://scripts/debug_shots.gd"
 [physics]
 
 common/physics_ticks_per_second=60
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://assets/data/strings.en.translation", "res://assets/data/strings.ru.translation")

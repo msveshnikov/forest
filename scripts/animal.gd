@@ -3,13 +3,10 @@ extends CharacterBody3D
 ## Shared body of every animal. A controller component (player or AI) is
 ## added as a child and drives the animal through move_dir / running / jump.
 
-signal needs_changed(hunger: float, fatigue: float)
 signal message(text: String)
-signal caught(by: Animal)
 
 const LOOPED := [&"idle", &"walk", &"run", &"eat", &"sleep"]
 const EAT_TIME := 2.4
-const ATTACK_TIME := 0.7
 
 @export var stats: AnimalStats
 ## When true the animal only plays animations (menu preview).
@@ -28,9 +25,6 @@ var home: AnimalHome
 
 var _eat_timer := 0.0
 var _eat_target: Node
-var _attack_timer := 0.0
-var _attack_target: Animal
-var _attack_hit := false
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 @onready var model: Node3D = $Model
@@ -88,7 +82,7 @@ func is_player() -> bool:
 
 
 func is_busy() -> bool:
-	return sleeping or _eat_timer > 0.0 or _attack_timer > 0.0
+	return sleeping or _eat_timer > 0.0
 
 
 # ------------------------------------------------------------------ physics
@@ -100,8 +94,6 @@ func _physics_process(delta: float) -> void:
 		velocity.y -= _gravity * delta
 
 	var speed := stats.run_speed if running else stats.walk_speed
-	if hunger >= 100.0 or fatigue >= 100.0:
-		speed *= 0.55
 	var target := Vector3.ZERO if is_busy() else move_dir.limit_length(1.0) * speed
 	var accel := stats.acceleration * (1.0 if is_on_floor() else 0.35)
 	velocity.x = move_toward(velocity.x, target.x, accel * delta)
@@ -118,9 +110,6 @@ func _physics_process(delta: float) -> void:
 	if flat.length() > 0.15 and not is_busy():
 		var yaw := atan2(-velocity.x, -velocity.z)
 		rotation.y = lerp_angle(rotation.y, yaw, clampf(stats.turn_speed * delta, 0.0, 1.0))
-	elif _attack_target and is_instance_valid(_attack_target):
-		var d := _attack_target.global_position - global_position
-		rotation.y = lerp_angle(rotation.y, atan2(-d.x, -d.z), clampf(12.0 * delta, 0.0, 1.0))
 
 	if global_position.y < -30.0:
 		respawn_at_home()
@@ -140,7 +129,6 @@ func _process(delta: float) -> void:
 		var tire := stats.fatigue_rate * (2.2 if running and velocity.length() > stats.walk_speed else 1.0)
 		fatigue = minf(100.0, fatigue + tire * delta)
 		hunger = minf(100.0, hunger + stats.hunger_rate * delta)
-	needs_changed.emit(hunger, fatigue)
 
 
 # ------------------------------------------------------------------ actions
@@ -167,7 +155,7 @@ func start_sleep() -> void:
 	play_anim(&"sleep", 0.4)
 	if is_player():
 		TimeOfDay.set_fast_forward(true)
-		message.emit("Хр-р-р… Сон восстанавливает силы. [E] — проснуться")
+		message.emit(tr("MSG_SLEEP"))
 
 
 func wake_up() -> void:
@@ -180,26 +168,13 @@ func wake_up() -> void:
 		collision_layer = 2
 	if is_player():
 		TimeOfDay.set_fast_forward(false)
-		message.emit("Доброе утро!" if not TimeOfDay.is_night() else "Вы проснулись.")
+		message.emit(tr("MSG_WAKE" if TimeOfDay.is_night() else "MSG_MORNING"))
 
 
 func hide_in_home() -> void:
 	hidden_in_home = true
 	visible = false
 	collision_layer = 0
-
-
-func start_attack(target: Animal) -> void:
-	if is_busy() or not stats.is_predator:
-		return
-	_attack_target = target
-	_attack_timer = ATTACK_TIME
-	_attack_hit = false
-	play_anim(&"attack", 0.05)
-
-
-func can_hunt(other: Animal) -> bool:
-	return other != self and stats.prey.has(other.stats.species) and not other.hidden_in_home
 
 
 func _update_actions(delta: float) -> void:
@@ -210,29 +185,9 @@ func _update_actions(delta: float) -> void:
 		elif _eat_timer <= 0.0:
 			var food_value: float = _eat_target.consume(self)
 			hunger = maxf(0.0, hunger - food_value)
-			if is_player():
-				message.emit("Ням! %s" % _eat_target.display_name)
+			if is_player() and food_value > 0.0:
+				message.emit(tr("MSG_EAT"))
 			_eat_target = null
-	if _attack_timer > 0.0:
-		_attack_timer -= delta
-		if not _attack_hit and _attack_timer < ATTACK_TIME * 0.45:
-			_attack_hit = true
-			if _attack_target and is_instance_valid(_attack_target) \
-					and _attack_target.global_position.distance_to(global_position) < stats.attack_range + 0.6:
-				_attack_target.on_caught(self)
-				hunger = maxf(0.0, hunger - 45.0)
-				if is_player():
-					message.emit("Добыча поймана! Сытость +45")
-		if _attack_timer <= 0.0:
-			_attack_target = null
-
-
-func on_caught(by: Animal) -> void:
-	caught.emit(by)
-	if is_player():
-		hunger = minf(100.0, hunger + 15.0)
-		message.emit("Вас поймал(а) %s! Вы убежали домой." % by.stats.display_name.to_lower())
-	respawn_at_home()
 
 
 func respawn_at_home() -> void:
@@ -258,8 +213,6 @@ func _update_animation(hspeed: float) -> void:
 		a = &"sleep"
 	elif _eat_timer > 0.0:
 		a = &"eat"
-	elif _attack_timer > 0.0:
-		a = &"attack"
 	elif not is_on_floor():
 		a = &"jump"
 	elif hspeed > 0.15:

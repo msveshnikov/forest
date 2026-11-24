@@ -1,0 +1,116 @@
+keys,en,ru
+"GAME_TITLE","Forest Friends","Лесные друзья"
+"MENU_LEAD","Follow the golden sparkles and light the forest lantern.","Иди за золотыми огоньками и зажги лесной фонарь."
+"MENU_PLAY","Play","Играть"
+"MENU_SETTINGS","Settings","Настройки"
+"MENU_CONTROLS","Controls","Управление"
+"MENU_QUIT","Quit","Выход"
+"MENU_BACK","Back","Назад"
+"MENU_LOADING","The forest is waking up…","Лес просыпается…"
+"SET_LANGUAGE","Language","Язык"
+"SET_QUALITY","Graphics quality","Качество графики"
+"SET_ADAPTIVE","Adaptive","Автоматически"
+"SET_PERFORMANCE","Performance","Быстродействие"
+"SET_DETAIL","High","Высокое"
+"SET_SENSITIVITY","Camera sensitivity","Чувствительность камеры"
+"SET_FULLSCREEN","Fullscreen","Полноэкранный режим"
+"SET_DEFAULTS","Reset to defaults","Сбросить настройки"
+"CONTROL_DESKTOP","WASD / Arrows   Move
+Shift   Run
+Space   Jump
+Mouse / Wheel   Look / Zoom
+E   Interact
+Esc   Pause","WASD / стрелки   Ходьба
+Shift   Бег
+Пробел   Прыжок
+Мышь / колесо   Камера / масштаб
+E   Действие
+Esc   Пауза"
+"CONTROL_TOUCH","Left thumb   Move, drag farther to run
+Right thumb   Look, pinch to zoom
+Action   Have a snack or rest at home
+II   Pause","Левый палец   Ходьба, потяните дальше для бега
+Правый палец   Камера, два пальца для масштаба
+Действие   Перекусить или отдохнуть дома
+II   Пауза"
+"SELECT_TITLE","Choose an animal","Выберите зверя"
+"SELECT_START","Enter the forest","Войти в лес"
+"SELECT_DIET","Diet: %s","Еда: %s"
+"SELECT_HOME","Home: %s","Дом: %s"
+"SELECT_NOCTURNAL","Nocturnal","Ночной"
+"SELECT_DIURNAL","Diurnal","Дневной"
+"SELECT_SPEED","Running speed: %.1f m/s","Скорость бега: %.1f м/с"
+"ANIMAL_FOX","Fox","Лиса"
+"ANIMAL_WOLF","Wolf","Волк"
+"ANIMAL_HARE","Hare","Заяц"
+"ANIMAL_BEAR","Bear","Медведь"
+"ANIMAL_SQUIRREL","Squirrel","Белка"
+"ANIMAL_HEDGEHOG","Hedgehog","Ёж"
+"DESC_FOX","A curious fox with a fluffy tail. Loves berries.","Любопытная лиса с пушистым хвостом. Любит ягоды."
+"DESC_WOLF","A friendly wolf who likes long walks and berries.","Дружелюбный волк любит долгие прогулки и ягоды."
+"DESC_HARE","A bouncy hare who loves clover and berries.","Заяц любит прыгать и лакомиться клевером и ягодами."
+"DESC_BEAR","A big, gentle bear who loves berries and mushrooms.","Большой добрый медведь любит ягоды и грибы."
+"DESC_SQUIRREL","Small and quick. Gathers acorns and mushrooms and lives in a hollow oak.","Маленькая и шустрая. Собирает жёлуди и грибы, живёт в дупле дуба."
+"DESC_HEDGEHOG","A little hedgehog who likes quiet walks under the stars.","Маленький ёж любит тихие прогулки под звёздами."
+"HOME_BEAR_CAVE","hilltop cave","пещера на холме"
+"HOME_WOLF_DEN","rocky den","логово в скалах"
+"HOME_FOX_BURROW","burrow under the roots","нора под корнями"
+"HOME_HARE_MEADOW","meadow burrows","норки на поляне"
+"HOME_SQUIRREL_HOLLOW","hollow in the old oak","дупло старого дуба"
+"HOME_HEDGEHOG_NEST","leaf nest","гнездо из листьев"
+"FOOD_BERRIES","berries","ягоды"
+"FOOD_MUSHROOM","mushrooms","грибы"
+"FOOD_ACORN","acorns","жёлуди"
+"FOOD_CLOVER","clover","клевер"
+"PAUSE_TITLE","Paused","Пауза"
+"PAUSE_RESUME","Resume","Продолжить"
+"PAUSE_MENU","Main menu","Главное меню"
+"PAUSE_LEAVE","End this outing? Your quest progress will reset.","Завершить прогулку? Прогресс заданий сбросится."
+"PAUSE_END","End outing","Завершить прогулку"
+"MENU_CANCEL","Cancel","Отмена"
+"HUD_HELP_DESKTOP","WASD  Move    Shift  Run    Space  Jump
+Mouse  Look    E  Interact    Esc  Pause","WASD  Ходьба    Shift  Бег    Пробел  Прыжок
+Мышь  Камера    E  Действие    Esc  Пауза"
+"HUD_HELP_TOUCH","Left thumb to move · Right thumb to look","Левый палец — ходьба · Правый палец — камера"
+"ACTION_DEFAULT","Action","Действие"
+"ACTION_WAKE","Wake up","Проснуться"
+"ACTION_SLEEP","Sleep at home","Лечь спать дома"
+"ACTION_EAT","Eat %s","Съесть: %s"
+"TOUCH_WAKE","Get up","Встать"
+"TOUCH_SLEEP","Sleep","Спать"
+"TOUCH_EAT","Eat","Съесть"
+"TOUCH_JUMP","Jump","Прыжок"
+"TOUCH_RUN","Run","Бег"
+"TOUCH_WALK","Move","Ходьба"
+"MSG_SLEEP","Time for a little nap.","Время немного подремать."
+"MSG_MORNING","Good morning!","Доброе утро!"
+"MSG_WAKE","You woke up.","Вы проснулись."
+"MSG_EAT","A good meal!","Подкрепились!"
+"QUEST_HEADER","Woodland Trail","Лесная тропа"
+"QUEST_GATHER","Gather kindling","Собери хворост"
+"QUEST_GATHER_DESC","Walk up to the three golden sparkles.","Подойди к трём золотым огонькам."
+"QUEST_BUNDLE","Kindling","Хворост"
+"QUEST_COLLECTED","Well done!","Здорово!"
+"QUEST_EXPLORE","Find the trail signs","Найди указатели"
+"QUEST_EXPLORE_DESC","Follow the sparkles to the bridge, oak and meadow.","Иди за огоньками к мосту, дубу и лугу."
+"QUEST_BRIDGE","Wooden bridge","Деревянный мост"
+"QUEST_OAK","Old oak","Старый дуб"
+"QUEST_MEADOW","Hare meadow","Заячий луг"
+"QUEST_DISCOVERED","You found it! %s","Найдено! %s"
+"QUEST_LIGHT","Light the lantern","Зажги фонарь"
+"QUEST_LIGHT_DESC","Walk up to the lantern to make it glow.","Подойди к фонарю, и он загорится."
+"QUEST_LANTERN","Clearing lantern","Фонарь на поляне"
+"QUEST_DONE","The fireflies are here!","Светлячки прилетели!"
+"QUEST_DONE_DESC","The lantern is glowing. Explore the forest or watch the fireflies.","Фонарь горит. Можно погулять или посмотреть на светлячков."
+"QUEST_WAYPOINT","%s · %d m","%s · %d м"
+
+"MENU_PRIVACY","Privacy policy","Конфиденциальность"
+"PRIVACY_BODY","Forest Friends is published by MaxSoft. The game works offline and does not collect, transmit or share personal data, including data about children. It has no ads, analytics or accounts.
+
+Language and game settings stay in private storage on this device. Clear the app data or uninstall the game to delete them.
+
+For privacy questions, use the MaxSoft developer contact on the Google Play listing.","Игру «Лесные друзья» выпускает MaxSoft. Игра работает офлайн и не собирает, не передаёт и не раскрывает личные данные, в том числе данные детей. В игре нет рекламы, аналитики и аккаунтов.
+
+Язык и другие настройки игры хранятся в закрытой папке приложения на устройстве. Их можно удалить, очистив данные приложения или удалив игру.
+
+По вопросам конфиденциальности можно обратиться по контактному адресу MaxSoft на странице игры в Google Play."

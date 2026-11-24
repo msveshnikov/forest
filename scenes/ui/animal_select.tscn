@@ -51,7 +51,7 @@ theme_override_constants/separation = 14
 [node name="Header" type="Label" parent="Panel/VBox"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 34
-text = "Выберите зверя"
+text = "SELECT_TITLE"
 horizontal_alignment = 1
 
 [node name="Grid" type="GridContainer" parent="Panel/VBox"]
@@ -70,7 +70,6 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0.45, 1)
 theme_override_font_sizes/font_size = 40
-text = "Лиса"
 
 [node name="DescLabel" type="Label" parent="Panel/VBox"]
 unique_name_in_owner = true
@@ -95,10 +94,10 @@ size_flags_vertical = 3
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
-text = "Начать игру"
+text = "SELECT_START"
 
 [node name="BackButton" type="Button" parent="Panel/VBox"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-text = "Назад"
+text = "MENU_BACK"

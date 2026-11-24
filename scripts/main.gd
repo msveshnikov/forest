@@ -37,6 +37,8 @@ func show_select() -> void:
 
 func start_game(species: StringName) -> void:
 	Game.selected_species = species
+	if OS.has_feature("web"):
+		Game.capture_mouse()
 	%Loading.visible = true
 	await get_tree().process_frame
 	await get_tree().process_frame

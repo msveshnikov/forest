@@ -5,18 +5,12 @@
 [resource]
 script = ExtResource("1_stats")
 species = &"bear"
-display_name = "Медведь"
-description = "Большой и сильный. Ловит рыбу в ручье, ест ягоды и грибы."
 walk_speed = 2.0
 run_speed = 6.4
 jump_velocity = 4.4
-is_predator = true
-prey = Array[StringName]([&"hare"])
-diet = Array[StringName]([&"fish", &"berries", &"mushroom", &"insects"])
+diet = Array[StringName]([&"berries", &"mushroom"])
 home_id = &"bear_cave"
 nocturnal = false
-sense_radius = 12
-attack_range = 1.4
 hunger_rate = 0.28
 camera_distance = 5.0
 camera_height = 1.2

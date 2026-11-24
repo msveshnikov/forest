@@ -1,34 +1,33 @@
 extends Control
-## Title screen: painted title art (concept/ui/title_screen.png) with the menu buttons over it.
 
 signal play_pressed
 signal quit_pressed
 
-@onready var background: TextureRect = %Background
+var _return_focus: Button
 
 
 func _ready() -> void:
-	resized.connect(_fit_background)
-	_fit_background()
 	%PlayButton.pressed.connect(func() -> void: play_pressed.emit())
 	%QuitButton.pressed.connect(func() -> void: quit_pressed.emit())
+	%SettingsButton.pressed.connect(_open_options.bind(%SettingsButton, true))
+	%ControlsButton.pressed.connect(_open_options.bind(%ControlsButton, false))
+	%Options.closed.connect(_close_options)
+	%QuitButton.visible = not OS.has_feature("web")
 	%PlayButton.grab_focus()
-	if OS.has_feature("web"):
-		%QuitButton.visible = false   # a browser tab can't quit itself
 
 
-## Cover the screen with the picture, keeping its aspect. On screens wider than the art
-## (phones) the overflow is cut mostly from the bottom: the title sign starts ~4% from the
-## top of the picture, so at most 3% is cut there and the sign stays whole.
-const MAX_TOP_CROP := 0.03
+func _open_options(button: Button, show_settings: bool) -> void:
+	_return_focus = button
+	%Card.hide()
+	%Options.open(show_settings)
 
 
-func _fit_background() -> void:
-	var tex_size: Vector2 = background.texture.get_size()
-	var scale_f: float = maxf(size.x / tex_size.x, size.y / tex_size.y)
-	var draw_size: Vector2 = tex_size * scale_f
-	background.size = draw_size
-	var y: float = (size.y - draw_size.y) * 0.5
-	if draw_size.y > size.y:
-		y = -minf(draw_size.y - size.y, draw_size.y * MAX_TOP_CROP)
-	background.position = Vector2((size.x - draw_size.x) * 0.5, y)
+func _close_options() -> void:
+	%Card.show()
+	_return_focus.grab_focus()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"pause") and %Options.visible:
+		get_viewport().set_input_as_handled()
+		%Options.close()
